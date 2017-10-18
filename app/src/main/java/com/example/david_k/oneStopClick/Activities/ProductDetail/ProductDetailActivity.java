@@ -1,16 +1,14 @@
-package com.example.david_k.oneStopClick;
+package com.example.david_k.oneStopClick.Activities.ProductDetail;
 
+import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v4.app.NavUtils;
-import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.david_k.oneStopClick.Fragments.ProductList.ProductFragment;
 import com.example.david_k.oneStopClick.Fragments.ProductList.ProductListFragment;
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
