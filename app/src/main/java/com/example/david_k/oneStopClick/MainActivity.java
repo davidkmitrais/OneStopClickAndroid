@@ -5,7 +5,6 @@ import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
@@ -16,12 +15,11 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.david_k.oneStopClick.Presenters.About.AboutFragment;
-import com.example.david_k.oneStopClick.Presenters.Admin.AdminFragment;
-import com.example.david_k.oneStopClick.Presenters.Cart.CartFragment;
-import com.example.david_k.oneStopClick.Presenters.ProductList.ProductFragment;
+import com.example.david_k.oneStopClick.Fragments.About.AboutFragment;
+import com.example.david_k.oneStopClick.Fragments.Admin.AdminFragment;
+import com.example.david_k.oneStopClick.Fragments.Cart.CartFragment;
 import com.example.david_k.oneStopClick.ModelLayers.Enums.NavBarItem;
-import com.example.david_k.oneStopClick.Presenters.ProductList.ProductListFragment;
+import com.example.david_k.oneStopClick.Fragments.ProductList.ProductListFragment;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener, ProductListFragment.OnFragmentInteractionListener {

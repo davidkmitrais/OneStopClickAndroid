@@ -1,16 +1,20 @@
-package com.example.david_k.oneStopClick.Presenters.ProductList;
+package com.example.david_k.oneStopClick.Fragments.ProductList;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
+import com.example.david_k.oneStopClick.ProductDetailActivity;
 import com.example.david_k.oneStopClick.R;
 
 import java.util.ArrayList;
@@ -80,7 +84,7 @@ public class ProductListFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.product_list_recycler_view);
 
         productList = new ArrayList<>();
-        adapter = new ProductViewAdapter(getActivity(), productList);
+        adapter = new ProductViewAdapter(getActivity(), productList, (v, position) -> rowTapped(position));
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -146,10 +150,44 @@ public class ProductListFragment extends Fragment {
         Product addProduct = null;
 
         for (int i = 0; i < 10; i++) {
-            addProduct = new Product(i + 1, "Product " + (i + 1), i * 10, productIds[i]);
+            addProduct = new Product(i, "Product " + (i + 1), i * 10, productIds[i]);
             productList.add(addProduct);
         }
 
         adapter.notifyDataSetChanged();
+    }
+
+    private void rowTapped(int position) {
+        Product product = productList.get(position);
+        goToProductDetail(product);
+    }
+
+    private void goToProductDetail(Product product){
+        //Toast.makeText(getActivity(), "Go to product Detail '"+product.getName()+"' (id:"+product.id+")", Toast.LENGTH_SHORT).show();
+
+//        Fragment fragment = null;
+//        Class fragmentClass = ProductFragment.class;
+//        try {
+//            fragment = (Fragment) fragmentClass.newInstance();
+//            Bundle bundle = new Bundle();
+//            bundle.putInt(Constants.productIdKey, product.id);
+//            fragment.setArguments(bundle);
+//        } catch (java.lang.InstantiationException e) {
+//            e.printStackTrace();
+//        } catch (IllegalAccessException e) {
+//            e.printStackTrace();
+//        }
+//
+//        FragmentManager fragmentManager = getFragmentManager();
+//        fragmentManager.beginTransaction().replace(R.id.screen_area, fragment).commit();
+
+        Bundle bundle = new Bundle();
+        bundle.putInt(Constants.productIdKey, product.id);
+
+        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtras(bundle);
+
+        startActivity(intent);
+
     }
 }

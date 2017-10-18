@@ -1,4 +1,4 @@
-package com.example.david_k.oneStopClick.Presenters.Cart;
+package com.example.david_k.oneStopClick.Fragments.About;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -13,12 +13,12 @@ import com.example.david_k.oneStopClick.R;
  * Created by David_K on 12/10/2017.
  */
 
-public class CartFragment extends Fragment {
+public class AboutFragment extends Fragment {
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.cart_fragment, null);
+        return inflater.inflate(R.layout.about_fragment, null);
     }
 
     @Override
