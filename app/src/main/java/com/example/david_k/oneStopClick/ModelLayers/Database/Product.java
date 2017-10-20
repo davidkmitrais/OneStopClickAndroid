@@ -1,10 +1,13 @@
 package com.example.david_k.oneStopClick.ModelLayers.Database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  * Created by David_K on 13/10/2017.
  */
 
-public class Product {
+public class Product implements Parcelable {
     public int id;
     public int price;
     public String name;
@@ -33,4 +36,39 @@ public class Product {
     public void setImageId(int imageId) {
         this.imageId = imageId;
     }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(this.id);
+        dest.writeInt(this.price);
+        dest.writeString(this.name);
+        dest.writeString(this.imageName);
+        dest.writeInt(this.imageId);
+    }
+
+    protected Product(Parcel in) {
+        this.id = in.readInt();
+        this.price = in.readInt();
+        this.name = in.readString();
+        this.imageName = in.readString();
+        this.imageId = in.readInt();
+    }
+
+    public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {
+        @Override
+        public Product createFromParcel(Parcel source) {
+            return new Product(source);
+        }
+
+        @Override
+        public Product[] newArray(int size) {
+            return new Product[size];
+        }
+    };
 }

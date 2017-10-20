@@ -6,8 +6,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
@@ -18,20 +16,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.david_k.oneStopClick.MainActivity;
-import com.example.david_k.oneStopClick.Views.Fragments.Cart.CartFragment;
-import com.example.david_k.oneStopClick.Views.Fragments.ProductList.ProductListFragment;
 import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.MainActivity;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "ProductDetailActivity";
-    private List<Product> productList;
     private Product product;
     private int numItemOrdered;
 
@@ -50,11 +42,9 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
 
         numItemOrdered = 0;
-        productList = new ArrayList<>();
-        setDummyProduct();
+        product = getIntent().getExtras().getParcelable(Constants.productKey);
 
         setupUI();
-        parseBundle();
         configureUI();
 
     }
@@ -74,27 +64,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
-    }
-
-    private void setDummyProduct() {
-        int[] productIds = new int[]{
-                R.mipmap.product001,
-                R.mipmap.product002,
-                R.mipmap.product003,
-                R.mipmap.product004,
-                R.mipmap.product005,
-                R.mipmap.product006,
-                R.mipmap.product007,
-                R.mipmap.product008,
-                R.mipmap.product009,
-                R.mipmap.product010};
-
-        Product addProduct = null;
-
-        for (int i = 0; i < 10; i++) {
-            addProduct = new Product(i, "Product " + (i + 1), i * 10, productIds[i]);
-            productList.add(addProduct);
-        }
     }
 
     private void setupUI() {
@@ -168,17 +137,6 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
     }
 
-
-    private void parseBundle() {
-        Bundle bundle = getIntent().getExtras();
-        int productId = 0;
-        if (bundle != null){
-            productId = bundle.getInt(Constants.productIdKey, 0);
-        }
-
-        product = productList.get(productId);
-    }
-
     private void configureUI() {
         productImage.setImageResource(product.imageId);
         nameTextView.setText(product.name);
@@ -193,19 +151,5 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
         itemOrderedEditText.setText(String.valueOf(numItemOrdered));
-    }
-
-    private void showProductListFragment() {
-        Fragment fragment = null;
-        Class fragmentClass = ProductListFragment.class;
-
-        try {
-            fragment = (Fragment) fragmentClass.newInstance();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction().replace(R.id.screen_area, fragment).commit();
     }
 }

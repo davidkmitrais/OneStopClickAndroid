@@ -120,11 +120,8 @@ public class ProductListFragment extends Fragment {
 
     private void goToProductDetail(Product product){
 
-        Bundle bundle = new Bundle();
-        bundle.putInt(Constants.productIdKey, product.id);
-
         Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
-        intent.putExtras(bundle);
+        intent.putExtra(Constants.productKey, product);
 
         startActivity(intent);
 
