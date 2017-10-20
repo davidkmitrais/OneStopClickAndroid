@@ -1,4 +1,4 @@
-package com.example.david_k.oneStopClick.Fragments.ProductList;
+package com.example.david_k.oneStopClick.Views.Fragments.ProductList;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
@@ -25,7 +25,8 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
     private Context context;
     private List<Product> products;
     CustomItemClickListener listener;
-    private List<Product> filteredProducts;
+    public List<Product> filteredProducts;
+//    private List<Product> originalFilteredProducts;
 
     public ProductViewAdapter(Context context, List<Product> productList, CustomItemClickListener listener) {
         this.context = context;
@@ -54,6 +55,22 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
         Glide.with(context).load(product.getImageId()).into(holder.itemPhoto);
     }
 
+//    @Override
+//    public long getItemId(int position) {
+//        int itemID;
+//
+//        // orig will be null only if we haven't filtered yet:
+//        if (orig == null)
+//        {
+//            itemID = position;
+//        }
+//        else
+//        {
+//            itemID = orig.indexOf(dataSet.get(position));
+//        }
+//        return itemID;
+//    }
+
     @Override
     public int getItemCount() {
         return filteredProducts.size();
@@ -67,7 +84,6 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
                 String charString = constraint.toString();
 
                 if (charString.isEmpty()) {
-
                     filteredProducts = products;
                 } else {
 
@@ -83,6 +99,10 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
 
                     filteredProducts = filteredList;
                 }
+
+//                if (originalFilteredProducts == null){
+//                    originalFilteredProducts = filteredProducts;
+//                }
 
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredProducts;

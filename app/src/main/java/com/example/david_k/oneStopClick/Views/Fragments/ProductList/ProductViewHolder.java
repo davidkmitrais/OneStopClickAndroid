@@ -1,4 +1,4 @@
-package com.example.david_k.oneStopClick.Fragments.ProductList;
+package com.example.david_k.oneStopClick.Views.Fragments.ProductList;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;

@@ -1,4 +1,4 @@
-package com.example.david_k.oneStopClick.Fragments.Cart;
+package com.example.david_k.oneStopClick.Views.Fragments.Cart;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

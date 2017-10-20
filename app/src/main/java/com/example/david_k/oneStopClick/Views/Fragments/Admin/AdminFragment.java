@@ -1,4 +1,4 @@
-package com.example.david_k.oneStopClick.Fragments.Admin;
+package com.example.david_k.oneStopClick.Views.Fragments.Admin;
 
 import android.os.Bundle;
 import android.support.annotation.Nullable;

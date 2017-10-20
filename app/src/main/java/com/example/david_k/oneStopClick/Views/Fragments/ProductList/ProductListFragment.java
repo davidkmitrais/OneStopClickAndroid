@@ -1,4 +1,4 @@
-package com.example.david_k.oneStopClick.Fragments.ProductList;
+package com.example.david_k.oneStopClick.Views.Fragments.ProductList;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -14,7 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.david_k.oneStopClick.Activities.ProductDetail.ProductDetailActivity;
+import com.example.david_k.oneStopClick.Views.Activities.ProductDetail.ProductDetailActivity;
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
@@ -80,9 +80,13 @@ public class ProductListFragment extends Fragment {
 
             @Override
             public boolean onQueryTextChange(String newText) {
-                if (adapter != null) adapter.getFilter().filter(newText);
+                if (adapter != null) {
+                    adapter.getFilter().filter(newText);
+                }
+
                 return true;
             }
+
         });
     }
 
@@ -110,7 +114,7 @@ public class ProductListFragment extends Fragment {
     }
 
     private void rowTapped(int position) {
-        Product product = productList.get(position);
+        Product product = adapter.filteredProducts.get(position);
         goToProductDetail(product);
     }
 
