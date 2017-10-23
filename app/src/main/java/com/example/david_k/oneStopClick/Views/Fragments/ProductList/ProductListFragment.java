@@ -14,19 +14,23 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.david_k.oneStopClick.Views.Activities.ProductDetail.ProductDetailActivity;
+import com.example.david_k.oneStopClick.Database.DataSource;
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
+import com.example.david_k.oneStopClick.ModelLayers.SampleProductProvider;
 import com.example.david_k.oneStopClick.R;
+import com.example.david_k.oneStopClick.Views.Activities.ProductDetail.ProductDetailActivity;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class ProductListFragment extends Fragment {
 
+
+    DataSource mDataSource;
     private RecyclerView recyclerView;
     private ProductViewAdapter adapter;
-    private List<Product> productList;
+    private List<Product> productList = SampleProductProvider.productList;
+    private List<Product> productListFromDB;
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -48,16 +52,36 @@ public class ProductListFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.product_list_recycler_view);
 
-        productList = new ArrayList<>();
-        adapter = new ProductViewAdapter(getActivity(), productList, (v, position) -> rowTapped(position));
+        SetupProductData();
+
+        adapter = new ProductViewAdapter(getActivity(), productListFromDB, (v, position) -> rowTapped(position));
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(adapter);
 
-        setDummyProduct();
-
         return view;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+        mDataSource.close();
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        mDataSource.open();
+    }
+
+    private void SetupProductData(){
+
+        mDataSource = new DataSource(getActivity());
+        mDataSource.open();
+        mDataSource.seedDatabase(productList);
+
+        productListFromDB = mDataSource.getAllItems();
     }
 
     @Override
@@ -88,29 +112,6 @@ public class ProductListFragment extends Fragment {
             }
 
         });
-    }
-
-    private void setDummyProduct() {
-        int[] productIds = new int[]{
-                R.mipmap.product001,
-                R.mipmap.product002,
-                R.mipmap.product003,
-                R.mipmap.product004,
-                R.mipmap.product005,
-                R.mipmap.product006,
-                R.mipmap.product007,
-                R.mipmap.product008,
-                R.mipmap.product009,
-                R.mipmap.product010};
-
-        Product addProduct = null;
-
-        for (int i = 0; i < 10; i++) {
-            addProduct = new Product(i, "Product " + (i + 1), i * 10, productIds[i]);
-            productList.add(addProduct);
-        }
-
-        adapter.notifyDataSetChanged();
     }
 
     private void rowTapped(int position) {

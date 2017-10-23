@@ -27,7 +27,6 @@ public class ProductViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void configureWith(Product product) {
-        //int imageId = Helper.resourceIdWith(context, product.imageName);
         String price = String.valueOf(product.price);
 
         itemName.setText(product.name);

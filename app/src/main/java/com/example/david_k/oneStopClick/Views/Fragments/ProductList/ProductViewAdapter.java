@@ -26,7 +26,6 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
     private List<Product> products;
     CustomItemClickListener listener;
     public List<Product> filteredProducts;
-//    private List<Product> originalFilteredProducts;
 
     public ProductViewAdapter(Context context, List<Product> productList, CustomItemClickListener listener) {
         this.context = context;
@@ -54,22 +53,6 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
 
         Glide.with(context).load(product.getImageId()).into(holder.itemPhoto);
     }
-
-//    @Override
-//    public long getItemId(int position) {
-//        int itemID;
-//
-//        // orig will be null only if we haven't filtered yet:
-//        if (orig == null)
-//        {
-//            itemID = position;
-//        }
-//        else
-//        {
-//            itemID = orig.indexOf(dataSet.get(position));
-//        }
-//        return itemID;
-//    }
 
     @Override
     public int getItemCount() {
@@ -99,10 +82,6 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
 
                     filteredProducts = filteredList;
                 }
-
-//                if (originalFilteredProducts == null){
-//                    originalFilteredProducts = filteredProducts;
-//                }
 
                 FilterResults filterResults = new FilterResults();
                 filterResults.values = filteredProducts;
