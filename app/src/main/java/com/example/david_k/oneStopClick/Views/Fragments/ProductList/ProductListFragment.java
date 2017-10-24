@@ -16,12 +16,14 @@ import android.view.ViewGroup;
 
 import com.example.david_k.oneStopClick.Database.DataSource;
 import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.ModelLayers.SampleProductProvider;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.ProductDetail.ProductDetailActivity;
 
 import java.util.List;
+import java.util.Optional;
 
 public class ProductListFragment extends Fragment {
 
@@ -53,8 +55,9 @@ public class ProductListFragment extends Fragment {
         recyclerView = (RecyclerView) view.findViewById(R.id.product_list_recycler_view);
 
         SetupProductData();
+        List<Product> productListDisplay = CenterRepository.getCenterRepository().getListOfProductsInShoppingList();
 
-        adapter = new ProductViewAdapter(getActivity(), productListFromDB, (v, position) -> rowTapped(position));
+        adapter = new ProductViewAdapter(getActivity(), productListDisplay, (v, position) -> rowTapped(position));
 
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
@@ -82,6 +85,8 @@ public class ProductListFragment extends Fragment {
         mDataSource.seedDatabase(productList);
 
         productListFromDB = mDataSource.getAllItems();
+
+        CenterRepository.getCenterRepository().setListOfProductsInShoppingList(productListFromDB);
     }
 
     @Override
@@ -115,7 +120,10 @@ public class ProductListFragment extends Fragment {
     }
 
     private void rowTapped(int position) {
-        Product product = adapter.filteredProducts.get(position);
+        int productId = adapter.filteredProducts.get(position).getId();
+        Product product  = CenterRepository.getCenterRepository()
+                                        .getProductById(productId);
+
         goToProductDetail(product);
     }
 

@@ -16,7 +16,7 @@ public class Product implements Parcelable {
     public String name;
     public String imageName;
     public int imageId;
-
+    public int orderQty;
 
     public Product() {
     }
@@ -39,6 +39,7 @@ public class Product implements Parcelable {
         return imageName;
     }
     public int getImageId() { return imageId; }
+    public int getOrderQty() {return orderQty; }
 
     public void setId(int id){
         this.id= id;
@@ -53,6 +54,7 @@ public class Product implements Parcelable {
     public void setImageId(int imageId) {
         this.imageId = imageId;
     }
+    public void setOrderQty(int orderQty) {this.orderQty = orderQty; }
 
     public ContentValues toValues() {
         ContentValues values = new ContentValues(4);
@@ -78,6 +80,7 @@ public class Product implements Parcelable {
         dest.writeString(this.name);
         dest.writeString(this.imageName);
         dest.writeInt(this.imageId);
+        dest.writeInt(this.orderQty);
     }
 
     protected Product(Parcel in) {
@@ -86,6 +89,7 @@ public class Product implements Parcelable {
         this.name = in.readString();
         this.imageName = in.readString();
         this.imageId = in.readInt();
+        this.orderQty = in.readInt();
     }
 
     public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {

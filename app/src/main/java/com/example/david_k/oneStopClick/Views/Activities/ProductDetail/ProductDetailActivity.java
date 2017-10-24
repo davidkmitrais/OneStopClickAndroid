@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.MainActivity;
+import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 
@@ -33,7 +34,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageButton addToCartButton;
     private ImageButton plusItemCartButton;
     private ImageButton minusItemCartButton;
-    private EditText itemOrderedEditText;
+    private TextView itemOrderedEditText;
     private CartAddedDialogFragment cartAddedDialog;
 
     @Override
@@ -41,8 +42,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
 
-        numItemOrdered = 0;
         product = getIntent().getExtras().getParcelable(Constants.productKey);
+        numItemOrdered = CenterRepository.getCenterRepository()
+                            .getProductById(product.getId())
+                            .getOrderQty();
 
         setupUI();
         configureUI();
@@ -71,7 +74,7 @@ public class ProductDetailActivity extends AppCompatActivity {
         nameTextView = (TextView) findViewById(R.id.product_detail_name);
         priceTextView = (TextView) findViewById(R.id.product_detail_price);
 
-        itemOrderedEditText = (EditText) findViewById(R.id.order_item_text);
+        itemOrderedEditText = (TextView) findViewById(R.id.order_item_text);
         plusItemCartButton = (ImageButton) findViewById(R.id.plus_cart_button);
         minusItemCartButton = (ImageButton) findViewById(R.id.minus_cart_button);
         addToCartButton = (ImageButton) findViewById(R.id.product_add_to_cart_button);
@@ -151,5 +154,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
         itemOrderedEditText.setText(String.valueOf(numItemOrdered));
+
+        // Update Order Qty
+        CenterRepository.getCenterRepository()
+                .getProductById(product.getId())
+                .setOrderQty(numItemOrdered);
     }
 }
