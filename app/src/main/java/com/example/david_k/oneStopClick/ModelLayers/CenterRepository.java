@@ -29,6 +29,18 @@ public class CenterRepository {
         return listOfProductsInShoppingList;
     }
 
+    public List<Product> getListOfCartInShoppingList() {
+        List<Product> listOfCartInShoppingList = new ArrayList<>();
+
+        for (Product product: listOfProductsInShoppingList) {
+            if(product.getOrderQty() > 0){
+                listOfCartInShoppingList.add(product);
+            }
+        }
+
+        return listOfCartInShoppingList;
+    }
+
     public Product getProductById(int productId) {
         Product result = null;
 
