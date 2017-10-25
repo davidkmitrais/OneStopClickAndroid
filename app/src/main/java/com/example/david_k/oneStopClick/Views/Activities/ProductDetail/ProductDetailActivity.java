@@ -10,15 +10,14 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.MainActivity;
-import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 
@@ -36,6 +35,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageButton minusItemCartButton;
     private TextView itemOrderedEditText;
     private CartAddedDialogFragment cartAddedDialog;
+    private CenterRepositoryHelper centerRepositoryHelper = new CenterRepositoryHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,9 +43,8 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
 
         product = getIntent().getExtras().getParcelable(Constants.productKey);
-        numItemOrdered = CenterRepository.getCenterRepository()
-                            .getProductById(product.getId())
-                            .getOrderQty();
+
+        numItemOrdered = centerRepositoryHelper.GetOrderQtyByProductId(product.getId());
 
         setupUI();
         configureUI();
@@ -83,6 +82,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 numItemOrdered++;
+
                 setTextForItemOrdered();
             }
         });
@@ -91,6 +91,7 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 numItemOrdered--;
+
                 setTextForItemOrdered();
             }
         });
@@ -99,6 +100,10 @@ public class ProductDetailActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "added to cart", Toast.LENGTH_SHORT).show();
+
+                // Update Order Qty
+                centerRepositoryHelper.SetOrderQtyByProductId(product.getId(), numItemOrdered);
+
                 cartAddedDialog = new CartAddedDialogFragment();
                 cartAddedDialog.show(getSupportFragmentManager(), "CartAddedDialogFragment");
             }
@@ -154,10 +159,5 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
         itemOrderedEditText.setText(String.valueOf(numItemOrdered));
-
-        // Update Order Qty
-        CenterRepository.getCenterRepository()
-                .getProductById(product.getId())
-                .setOrderQty(numItemOrdered);
     }
 }
