@@ -16,6 +16,7 @@ import com.example.david_k.oneStopClick.R;
 public class CartHolder extends RecyclerView.ViewHolder {
 
     public TextView cartProductName;
+    public TextView cartProductTotalPrice;
     public TextView cartProductPrice;
     public TextView cartOrderQty;
     public ImageView productPhoto;
@@ -26,6 +27,7 @@ public class CartHolder extends RecyclerView.ViewHolder {
         super(itemView);
 
         cartProductName = (TextView) itemView.findViewById(R.id.cart_product_name);
+        cartProductTotalPrice = (TextView) itemView.findViewById(R.id.cart_product_total_price);
         cartProductPrice = (TextView) itemView.findViewById(R.id.cart_product_price);
         cartOrderQty = (TextView) itemView.findViewById(R.id.cart_order_qty);;
         productPhoto = (ImageView) itemView.findViewById(R.id.cart_product_thumb);
@@ -35,9 +37,11 @@ public class CartHolder extends RecyclerView.ViewHolder {
 
     public void configureWith(Product product) {
         String price = String.valueOf(product.price);
+        int totalPrice = product.price * product.orderQty;
 
         cartProductName.setText(product.name);
-        cartProductPrice.setText(price);
+        cartProductPrice.setText("Price (USD) : " + price);
+        cartProductTotalPrice.setText(totalPrice + " USD");
         cartOrderQty.setText(String.valueOf(product.orderQty));
 
         //itemPhoto.setImageResource(product.imageId);

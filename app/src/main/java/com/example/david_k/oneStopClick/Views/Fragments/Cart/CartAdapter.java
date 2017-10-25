@@ -47,13 +47,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
                 int plusCartOrderQty = currentProduct.getOrderQty() + 1;
                 centerRepositoryHelper.SetOrderQtyByProductId(currentProduct.getId(), plusCartOrderQty);
 
-                setTextForCartOrderedQty(currentProduct.getId());
+                updateTextsForCart(currentProduct.getId());
             }
 
-            private void setTextForCartOrderedQty(int productId){
+            private void updateTextsForCart(int productId){
                 int numItemOrdered = centerRepositoryHelper.GetOrderQtyByProductId(productId);
+                int price = centerRepositoryHelper.GetProductById(productId).getPrice();
+                int totalPrice = numItemOrdered * price;
 
                 holder.cartOrderQty.setText(String.valueOf(numItemOrdered));
+                holder.cartProductTotalPrice.setText(totalPrice + " USD");
             }
         });
 
@@ -68,13 +71,16 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
                 }
                 centerRepositoryHelper.SetOrderQtyByProductId(currentProduct.getId(), minusCartOrderQty);
 
-                setTextForCartOrderedQty(currentProduct.getId());
+                updateTextsForCart(currentProduct.getId());
             }
 
-            private void setTextForCartOrderedQty(int productId){
+            private void updateTextsForCart(int productId){
                 int numItemOrdered = centerRepositoryHelper.GetOrderQtyByProductId(productId);
+                int price = centerRepositoryHelper.GetProductById(productId).getPrice();
+                int totalPrice = numItemOrdered * price;
 
                 holder.cartOrderQty.setText(String.valueOf(numItemOrdered));
+                holder.cartProductTotalPrice.setText(totalPrice + " USD");
             }
         });
 

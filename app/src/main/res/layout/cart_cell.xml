@@ -56,7 +56,7 @@
                 android:textSize="15sp" />
 
             <TextView
-                android:id="@+id/item_short_desc"
+                android:id="@+id/cart_product_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/cart_product_name"
@@ -75,8 +75,8 @@
                 android:id="@+id/iteam_avilable"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignBaseline="@+id/item_short_desc"
-                android:layout_alignBottom="@+id/item_short_desc"
+                android:layout_alignBaseline="@+id/cart_product_price"
+                android:layout_alignBottom="@+id/cart_product_price"
                 android:layout_alignParentRight="true"
                 android:layout_marginLeft="5dp"
                 android:ellipsize="marquee"
@@ -91,7 +91,7 @@
                 android:visibility="gone" />
 
             <TextView
-                android:id="@+id/cart_product_price"
+                android:id="@+id/cart_product_total_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"

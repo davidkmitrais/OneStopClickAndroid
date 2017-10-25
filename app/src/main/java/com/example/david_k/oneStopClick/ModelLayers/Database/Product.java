@@ -39,6 +39,7 @@ public class Product implements Parcelable {
         return imageName;
     }
     public int getImageId() { return imageId; }
+    public int getPrice() {return price; }
     public int getOrderQty() {return orderQty; }
 
     public void setId(int id){

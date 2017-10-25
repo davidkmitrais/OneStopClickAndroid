@@ -1,5 +1,6 @@
 package com.example.david_k.oneStopClick.Views.Fragments.Cart;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
+import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
+import com.example.david_k.oneStopClick.Views.Activities.ProductDetail.ProductDetailActivity;
 
 import java.util.List;
 
@@ -59,11 +62,11 @@ public class CartFragment extends Fragment {
 
     private void goToCartDetail(Product product){
 
-        Toast.makeText(getContext(), "goto Cart Detail for : "+product.getName(), Toast.LENGTH_SHORT);
-//        Intent intent = new Intent(getActivity(), CartDetailActivity.class);
-//        intent.putExtra(Constants.productKey, product);
-//
-//        startActivity(intent);
+//        Toast.makeText(getContext(), "goto Cart Detail for : "+product.getName(), Toast.LENGTH_SHORT);
+        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
+        intent.putExtra(Constants.productKey, product);
+
+        startActivity(intent);
 
     }
 }
