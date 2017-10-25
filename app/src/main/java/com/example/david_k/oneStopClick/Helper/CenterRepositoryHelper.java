@@ -25,4 +25,12 @@ public class CenterRepositoryHelper {
                 .getProductById(productId)
                 .setOrderQty(orderQty);
     }
+
+    public boolean IsProductSetOnCenterRepository(){
+        int size = CenterRepository.getCenterRepository()
+                        .getListOfProductsInShoppingList()
+                        .size();
+
+        return size > 0;
+    }
 }

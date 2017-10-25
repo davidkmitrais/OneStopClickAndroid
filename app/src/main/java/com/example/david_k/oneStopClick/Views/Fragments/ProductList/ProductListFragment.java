@@ -14,25 +14,18 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.david_k.oneStopClick.Database.DataSource;
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
-import com.example.david_k.oneStopClick.ModelLayers.SampleProductProvider;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.ProductDetail.ProductDetailActivity;
 
 import java.util.List;
-import java.util.Optional;
 
 public class ProductListFragment extends Fragment {
 
-
-    DataSource mDataSource;
     private RecyclerView recyclerView;
     private ProductViewAdapter adapter;
-    private List<Product> productList = SampleProductProvider.productList;
-    private List<Product> productListFromDB;
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -54,7 +47,6 @@ public class ProductListFragment extends Fragment {
 
         recyclerView = (RecyclerView) view.findViewById(R.id.product_list_recycler_view);
 
-        SetupProductData();
         List<Product> productListDisplay = CenterRepository.getCenterRepository().getListOfProductsInShoppingList();
 
         adapter = new ProductViewAdapter(getActivity(), productListDisplay, (v, position) -> rowTapped(position));
@@ -64,29 +56,6 @@ public class ProductListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         return view;
-    }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        mDataSource.close();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        mDataSource.open();
-    }
-
-    private void SetupProductData(){
-
-        mDataSource = new DataSource(getActivity());
-        mDataSource.open();
-        mDataSource.seedDatabase(productList);
-
-        productListFromDB = mDataSource.getAllItems();
-
-        CenterRepository.getCenterRepository().setListOfProductsInShoppingList(productListFromDB);
     }
 
     @Override
