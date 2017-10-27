@@ -10,7 +10,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 
 public class DBHelper extends SQLiteOpenHelper {
 
-    public static final String DB_FILE_NAME = "oneStopClickV02.db";
+    public static final String DB_FILE_NAME = "oneStopClickV04.db";
     public static final int DB_VERSION = 1;
 
     public DBHelper(Context context) {

@@ -1,6 +1,7 @@
 package com.example.david_k.oneStopClick.Views.Activities.ProductDetail;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -151,6 +152,10 @@ public class ProductDetailActivity extends AppCompatActivity {
         priceTextView.setText(String.valueOf(product.price));
 
         setTextForItemOrdered();
+    }
+
+    public static int getImageId(Context context, String imageName) {
+        return context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName());
     }
 
     private void setTextForItemOrdered(){
