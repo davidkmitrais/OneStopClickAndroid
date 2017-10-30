@@ -38,7 +38,7 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.david_k.oneStopClick.MainActivity" />
         </activity>
-        <activity android:name=".AddAddressActivity"
+        <activity android:name=".Views.Activities.PaymentAddAddress.PaymentAddAddressActivity"
             android:parentActivityName=".Views.Activities.PaymentDetail.PaymentDetailTabActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"

@@ -1,4 +1,4 @@
-package com.example.david_k.oneStopClick;
+package com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -9,8 +9,9 @@ import android.widget.EditText;
 
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
+import com.example.david_k.oneStopClick.R;
 
-public class AddAddressActivity extends AppCompatActivity {
+public class PaymentAddAddressActivity extends AppCompatActivity {
 
     private final static String TAG = "AddAddressActivity";
 

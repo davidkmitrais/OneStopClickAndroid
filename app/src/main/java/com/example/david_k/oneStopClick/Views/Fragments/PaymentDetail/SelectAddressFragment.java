@@ -7,12 +7,9 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
-import com.example.david_k.oneStopClick.AddAddressActivity;
-import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress.PaymentAddAddressActivity;
 import com.example.david_k.oneStopClick.R;
-import com.example.david_k.oneStopClick.Views.Activities.PaymentDetail.PaymentDetailTabActivity;
 
 public class SelectAddressFragment extends Fragment {
 
@@ -27,7 +24,7 @@ public class SelectAddressFragment extends Fragment {
         addNewAdress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), AddAddressActivity.class);
+                Intent intent = new Intent(getActivity(), PaymentAddAddressActivity.class);
 
                 startActivity(intent);
             }
