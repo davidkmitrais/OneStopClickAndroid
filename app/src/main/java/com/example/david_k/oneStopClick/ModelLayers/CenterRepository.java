@@ -1,8 +1,10 @@
 package com.example.david_k.oneStopClick.ModelLayers;
 
+import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,7 @@ public class CenterRepository {
 
     private static CenterRepository centerRepository;
     private List<Product> listOfProductsInShoppingList = Collections.synchronizedList(new ArrayList<Product>());
+    private List<Address> listOfAddress = Collections.synchronizedList(new ArrayList<Address>());
 
     public static CenterRepository getCenterRepository() {
 
@@ -56,5 +59,9 @@ public class CenterRepository {
 
     public void setListOfProductsInShoppingList(List<Product> getShoppingList) {
         this.listOfProductsInShoppingList = getShoppingList;
+    }
+
+    public void addToAddressList(Address address){
+        this.listOfAddress.add(address);
     }
 }
