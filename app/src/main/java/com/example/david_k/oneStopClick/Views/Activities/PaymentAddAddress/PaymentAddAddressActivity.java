@@ -67,6 +67,8 @@ public class PaymentAddAddressActivity extends AppCompatActivity {
 
             }
         });
+
+        setupEditTextsValidation();
     }
 
     private void setupUI(){
@@ -76,6 +78,26 @@ public class PaymentAddAddressActivity extends AppCompatActivity {
         deliveryText = (EditText) findViewById(R.id.delivery_address_input);
         cityText = (EditText) findViewById(R.id.city_address_input);
         stateText = (EditText) findViewById(R.id.state_address_input);
+    }
+
+    private void setupEditTextsValidation(){
+        setOnFocusChangeValidation(addressNameText);
+        setOnFocusChangeValidation(deliveryText);
+        setOnFocusChangeValidation(cityText);
+        setOnFocusChangeValidation(stateText);
+    }
+
+    private void setOnFocusChangeValidation(EditText editText){
+
+        editText.setOnFocusChangeListener(new View.OnFocusChangeListener(){
+
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if (editText.getText().length() < 3) {
+                    editText.setError("Should be filled with minimum 3 characters");
+                }
+            }
+        });
     }
 
     private void goToSelectAddressListActivity() {
