@@ -46,6 +46,15 @@ public class SelectAddressViewAdapter extends RecyclerView.Adapter<SelectAddress
     public void onBindViewHolder(SelectAddressViewHolder holder, int position) {
         Address address = addressList.get(position);
         holder.configureWith(address);
+
+        holder.removeButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                addressList.remove(position);
+                notifyItemRemoved(position);
+                notifyItemChanged(position, addressList.size());
+            }
+        });
     }
 
     @Override

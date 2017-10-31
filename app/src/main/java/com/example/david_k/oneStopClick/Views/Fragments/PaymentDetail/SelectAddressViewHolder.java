@@ -1,8 +1,10 @@
 package com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail;
 
+import android.media.Image;
 import android.support.v4.widget.TextViewCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
@@ -17,6 +19,7 @@ public class SelectAddressViewHolder extends RecyclerView.ViewHolder {
     public TextView addressName;
     public TextView streetName;
     public TextView cityStateName;
+    public ImageButton removeButton;
 
     public SelectAddressViewHolder(View itemView) {
         super(itemView);
@@ -24,6 +27,7 @@ public class SelectAddressViewHolder extends RecyclerView.ViewHolder {
         addressName = (TextView) itemView.findViewById(R.id.address_name_view_holder);
         streetName = (TextView) itemView.findViewById(R.id.street_name_view_holder);
         cityStateName = (TextView) itemView.findViewById(R.id.city_state_view_holder);
+        removeButton = (ImageButton) itemView.findViewById(R.id.remove_address_image_button);
     }
 
     public void configureWith(Address address) {
