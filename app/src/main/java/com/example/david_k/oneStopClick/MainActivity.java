@@ -171,6 +171,7 @@ public class MainActivity extends AppCompatActivity
 
         if (!centerRepositoryHelper.IsProductSetOnCenterRepository()) {
             CenterRepository.getCenterRepository().setListOfProductsInShoppingList(productListFromDB);
+            CenterRepository.getCenterRepository().setDummyAddressDefault();
         }
     }
     //endregion

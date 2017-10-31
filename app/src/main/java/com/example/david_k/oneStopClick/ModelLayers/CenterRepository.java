@@ -24,6 +24,7 @@ public class CenterRepository {
 
         if (null == centerRepository) {
             centerRepository = new CenterRepository();
+
         }
         return centerRepository;
     }
@@ -61,7 +62,16 @@ public class CenterRepository {
         this.listOfProductsInShoppingList = getShoppingList;
     }
 
+    public List<Address> getListOfAddress() {
+        return listOfAddress;
+    }
+
     public void addToAddressList(Address address){
         this.listOfAddress.add(address);
+    }
+
+    public void setDummyAddressDefault() {
+        Address defAddress = new Address("Work address", "By Pass Ngurah Rai, Gg Mina Utama No 1", "Denpasar", "Bali");
+        addToAddressList(defAddress);
     }
 }

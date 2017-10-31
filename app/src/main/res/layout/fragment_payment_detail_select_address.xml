@@ -4,15 +4,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.SelectAddressFragment">
-    <!--tools:context=".Views.Fragments.PaymentDetail.SelectAddressFragment">-->
-
-    <!--<com.google.android.gms.plus.PlusOneButton xmlns:plus="http://schemas.android.com/apk/lib/com.google.android.gms.plus"-->
-        <!--android:id="@+id/plus_one_button"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--plus:annotation="inline"-->
-        <!--plus:size="standard" />-->
-
 
     <android.support.constraint.ConstraintLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -63,15 +54,25 @@
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Address List :"
-            />
+            <LinearLayout
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Address List :"
+                    />
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/address_list_recycler_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clipToPadding="false"
+                    android:scrollbars="vertical"/>
+
+            </LinearLayout>
         </FrameLayout>
-
-
     </android.support.constraint.ConstraintLayout>
-
 </FrameLayout>
