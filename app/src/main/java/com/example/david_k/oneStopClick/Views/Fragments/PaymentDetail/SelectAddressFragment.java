@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
@@ -17,6 +18,7 @@ import com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress.Payme
 import com.example.david_k.oneStopClick.R;
 
 import java.util.List;
+import java.util.concurrent.RejectedExecutionException;
 
 public class SelectAddressFragment extends Fragment {
 
@@ -41,7 +43,7 @@ public class SelectAddressFragment extends Fragment {
 
         recyclerView = (RecyclerView) rootView.findViewById(R.id.address_list_recycler_view);
         List<Address> addresses = CenterRepository.getCenterRepository().getListOfAddress();
-        adapter = new SelectAddressViewAdapter(getActivity(), addresses, (v, position) -> rowTapped(position));
+        adapter = new SelectAddressViewAdapter(getActivity(), addresses, (v, position) -> rowTapped(v, recyclerView, position));
 
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(layoutManager);
@@ -50,10 +52,38 @@ public class SelectAddressFragment extends Fragment {
         return rootView;
     }
 
-    private void rowTapped(int position) {
+    private void rowTapped(View view, RecyclerView recyclerView, int position) {
+
+        for (int i = 0; i < recyclerView.getChildCount(); i++){
+            if (i == position) {
+                continue;
+            }
+
+            View childView = recyclerView.getChildAt(i);
+            TextView childSelectedText = (TextView) childView.findViewById(R.id.selected_address_text);
+            boolean isSelectedTextDisplayed = childSelectedText.getVisibility() == View.VISIBLE;
+            if (isSelectedTextDisplayed) {
+                CenterRepository.getCenterRepository().deleteSelectedAddress();
+                childSelectedText.setVisibility(View.INVISIBLE);
+                Log.d("SelectAddressFragment", "Remove selected text at : " + i);
+            }
+        }
+
+        TextView selectedText = (TextView) view.findViewById(R.id.selected_address_text);
+        boolean isSelectedTextDisplayed = selectedText.getVisibility() == View.VISIBLE;
+
         List<Address> addresses = CenterRepository.getCenterRepository().getListOfAddress();
         Address address = addresses.get(position);
 
-        Log.d("SelectAddressFragment", "tapped for : " + address.getAddressName());
+        if (isSelectedTextDisplayed) {
+            CenterRepository.getCenterRepository().deleteSelectedAddress();
+            selectedText.setVisibility(View.INVISIBLE);
+            Log.d("SelectAddressFragment", "Un-Select for : " + address.getAddressName());
+        }
+        else {
+            CenterRepository.getCenterRepository().setSelectedAddress(address);
+            selectedText.setVisibility(View.VISIBLE);
+            Log.d("SelectAddressFragment", "Select for : " + address.getAddressName());
+        }
     }
 }

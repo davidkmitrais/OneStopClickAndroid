@@ -11,6 +11,7 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,6 +20,8 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
+import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.SelectAddressFragment;
 
@@ -123,6 +126,14 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_payment_tab, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
+            Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
+            String addressName;
+            if (selectedAddress == null) {
+                addressName = "NOT SET";
+            } else {
+                addressName = selectedAddress.getAddressName();
+            }
+            Log.d("PayDetailTabActivity", "Selected Address is " + addressName);
             return rootView;
         }
     }

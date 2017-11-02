@@ -19,6 +19,7 @@ public class CenterRepository {
     private static CenterRepository centerRepository;
     private List<Product> listOfProductsInShoppingList = Collections.synchronizedList(new ArrayList<Product>());
     private List<Address> listOfAddress = Collections.synchronizedList(new ArrayList<Address>());
+    private Address selectedAddress = null;
 
     public static CenterRepository getCenterRepository() {
 
@@ -68,6 +69,18 @@ public class CenterRepository {
 
     public void addToAddressList(Address address){
         this.listOfAddress.add(address);
+    }
+
+    public void setSelectedAddress(Address selectedAddress){
+        this.selectedAddress = selectedAddress;
+    }
+
+    public void deleteSelectedAddress(){
+        this.selectedAddress = null;
+    }
+
+    public Address getSelectedAddress() {
+        return this.selectedAddress;
     }
 
     public void setDummyAddressDefault() {

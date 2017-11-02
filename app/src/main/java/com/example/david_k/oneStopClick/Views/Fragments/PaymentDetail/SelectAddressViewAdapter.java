@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.david_k.oneStopClick.Helper.CustomItemClickListener;
+import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
 
@@ -45,7 +46,9 @@ public class SelectAddressViewAdapter extends RecyclerView.Adapter<SelectAddress
     @Override
     public void onBindViewHolder(SelectAddressViewHolder holder, int position) {
         Address address = addressList.get(position);
-        holder.configureWith(address);
+        Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
+        boolean isSelected = selectedAddress != null && address.getAddressName() == selectedAddress.getAddressName();
+        holder.configureWith(address, isSelected);
 
         holder.removeButton.setOnClickListener(new View.OnClickListener() {
             @Override
