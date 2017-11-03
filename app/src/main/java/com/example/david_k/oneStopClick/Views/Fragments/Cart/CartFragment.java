@@ -61,7 +61,8 @@ public class CartFragment extends Fragment {
 
     private void goToCartDetail(Product product){
 
-//        Toast.makeText(getContext(), "goto Cart Detail for : "+product.getName(), Toast.LENGTH_SHORT);
+        CenterRepository.getCenterRepository().setSelectedProduct(product);
+
         Intent intent = new Intent(getActivity(), PaymentDetailTabActivity.class);
         intent.putExtra(Constants.productKey, product);
 

@@ -14,11 +14,10 @@ import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
-import com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress.PaymentAddAddressActivity;
 import com.example.david_k.oneStopClick.R;
+import com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress.PaymentAddAddressActivity;
 
 import java.util.List;
-import java.util.concurrent.RejectedExecutionException;
 
 public class SelectAddressFragment extends Fragment {
 

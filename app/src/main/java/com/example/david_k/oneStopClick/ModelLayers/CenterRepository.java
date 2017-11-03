@@ -4,11 +4,8 @@ import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Created by David_K on 24/10/2017.
@@ -20,6 +17,7 @@ public class CenterRepository {
     private List<Product> listOfProductsInShoppingList = Collections.synchronizedList(new ArrayList<Product>());
     private List<Address> listOfAddress = Collections.synchronizedList(new ArrayList<Address>());
     private Address selectedAddress = null;
+    private Product selectedProduct = null;
 
     public static CenterRepository getCenterRepository() {
 
@@ -63,6 +61,18 @@ public class CenterRepository {
         this.listOfProductsInShoppingList = getShoppingList;
     }
 
+    public void setSelectedProduct(Product selectedProduct){
+        this.selectedProduct = selectedProduct;
+    }
+
+    public void deleteSelectedProduct(){
+        this.selectedProduct = null;
+    }
+
+    public Product getSelectedProduct() {
+        return this.selectedProduct;
+    }
+
     public List<Address> getListOfAddress() {
         return listOfAddress;
     }
@@ -86,5 +96,6 @@ public class CenterRepository {
     public void setDummyAddressDefault() {
         Address defAddress = new Address("Work address", "By Pass Ngurah Rai, Gg Mina Utama No 1", "Denpasar", "Bali");
         addToAddressList(defAddress);
+        setSelectedAddress(defAddress);
     }
 }

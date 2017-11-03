@@ -1,45 +1,32 @@
 package com.example.david_k.oneStopClick.Views.Activities.PaymentDetail;
 
+import android.os.Bundle;
 import android.support.design.widget.TabLayout;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.view.ViewPager;
-import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
+import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.ConfirmationPaymentFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.SelectAddressFragment;
 
 public class PaymentDetailTabActivity extends AppCompatActivity {
 
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
 
     @Override
@@ -61,15 +48,55 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                        .setAction("Action", null).show();
-//            }
-//        });
+        mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                switch (position) {
+                    case 1:
+                        setupSelectedAddressTexts();
+                        break;
+                }
+            }
+
+            private void setupSelectedAddressTexts() {
+                Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
+
+                FragmentManager fragmentManager = getSupportFragmentManager();
+                ConfirmationPaymentFragment confirmationFragment = (ConfirmationPaymentFragment) fragmentManager.findFragmentById(R.id.confirmation_payment_fragment);
+                View confirmationFragView = confirmationFragment.getView();
+
+                TextView addressDeliveryText = (TextView)confirmationFragView.findViewById(R.id.address_detail_delivery_confirmation);
+                TextView addressCityText = (TextView)confirmationFragView.findViewById(R.id.address_detail_city_confirmation);
+                TextView addressStateText = (TextView)confirmationFragView.findViewById(R.id.address_detail_state_confirmation);
+                Button backToAdressButton = (Button)confirmationFragView.findViewById(R.id.back_to_select_address_conf_button);
+                Button continueToPaymentButton = (Button)confirmationFragView.findViewById(R.id.continue_to_payment_conf_button);
+
+                if (selectedAddress != null) {
+                    addressDeliveryText.setText(selectedAddress.getDeliveryAddress());
+                    addressCityText.setText(selectedAddress.getCity());
+                    addressStateText.setText(selectedAddress.getState());
+                    backToAdressButton.setVisibility(View.INVISIBLE);
+                    continueToPaymentButton.setVisibility(View.VISIBLE);
+                }
+                else {
+                    addressDeliveryText.setText("Please select an address before continue to payment.");
+                    addressCityText.setText("");
+                    addressStateText.setText("");
+                    continueToPaymentButton.setVisibility(View.INVISIBLE);
+                    backToAdressButton.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
     }
 
 
@@ -154,7 +181,11 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
             switch (position) {
                 case 0:
                     return new SelectAddressFragment();
-//
+
+                case 1:
+                    getSupportFragmentManager().beginTransaction().add(R.id.confirmation_payment_fragment, new ConfirmationPaymentFragment(), "confirmation_payment_fragment").commit();
+                    return new ConfirmationPaymentFragment();
+
                 default:
                     // getItem is called to instantiate the fragment for the given page.
                     // Return a PlaceholderFragment (defined as a static inner class below).
