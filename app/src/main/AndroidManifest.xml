@@ -38,11 +38,36 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.example.david_k.oneStopClick.MainActivity" />
         </activity>
-        <activity android:name=".Views.Activities.PaymentAddAddress.PaymentAddAddressActivity"
+        <activity
+            android:name=".Views.Activities.PaymentAddAddress.PaymentAddAddressActivity"
+            android:label="Add new Address"
             android:parentActivityName=".Views.Activities.PaymentDetail.PaymentDetailTabActivity">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".Views.Activities.PaymentDetail.PaymentDetailTabActivity"></meta-data>
+                android:value=".Views.Activities.PaymentDetail.PaymentDetailTabActivity" />
+        </activity>
+        <activity
+            android:name=".Views.Activities.PaymentMethods.CreditCartPaymentActivity"
+            android:label="Payment using Credit Cart"
+            android:parentActivityName=".Views.Activities.PaymentDetail.PaymentDetailTabActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Views.Activities.PaymentDetail.PaymentDetailTabActivity" />
+        </activity>
+        <activity
+            android:name=".Views.Activities.PaymentMethods.CashOnDeliveryPaymentActivity"
+            android:label="Payment using Cash on Delivery"
+            android:parentActivityName=".Views.Activities.PaymentDetail.PaymentDetailTabActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Views.Activities.PaymentDetail.PaymentDetailTabActivity" />
+        </activity>
+        <activity android:name=".Views.Activities.PaymentMethods.PaypalPaymentActivity"
+            android:label="Payment using Pay pal"
+            android:parentActivityName=".Views.Activities.PaymentDetail.PaymentDetailTabActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".Views.Activities.PaymentDetail.PaymentDetailTabActivity" />
         </activity>
     </application>
 

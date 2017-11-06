@@ -2,6 +2,7 @@ package com.example.david_k.oneStopClick.ModelLayers;
 
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
+import com.example.david_k.oneStopClick.ModelLayers.Enums.PaymentMethod;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -18,6 +19,7 @@ public class CenterRepository {
     private List<Address> listOfAddress = Collections.synchronizedList(new ArrayList<Address>());
     private Address selectedAddress = null;
     private Product selectedProduct = null;
+    private PaymentMethod selectedPaymentMethod;
 
     public static CenterRepository getCenterRepository() {
 
@@ -97,5 +99,13 @@ public class CenterRepository {
         Address defAddress = new Address("Work address", "By Pass Ngurah Rai, Gg Mina Utama No 1", "Denpasar", "Bali");
         addToAddressList(defAddress);
         setSelectedAddress(defAddress);
+    }
+
+    public void setSelectedPaymentMethod(PaymentMethod paymentMethod) {
+        this.selectedPaymentMethod = paymentMethod;
+    }
+
+    public PaymentMethod getSelectedPaymentMethod(){
+        return this.selectedPaymentMethod;
     }
 }

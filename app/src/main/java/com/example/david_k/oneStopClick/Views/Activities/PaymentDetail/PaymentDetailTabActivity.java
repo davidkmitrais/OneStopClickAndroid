@@ -21,6 +21,7 @@ import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.ConfirmationPaymentFragment;
+import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.PaymentMethodFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.SelectAddressFragment;
 
 public class PaymentDetailTabActivity extends AppCompatActivity {
@@ -186,9 +187,13 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
                     getSupportFragmentManager().beginTransaction().add(R.id.confirmation_payment_fragment, new ConfirmationPaymentFragment(), "confirmation_payment_fragment").commit();
                     return new ConfirmationPaymentFragment();
 
+                case 2:
+                    return new PaymentMethodFragment();
+
                 default:
                     // getItem is called to instantiate the fragment for the given page.
                     // Return a PlaceholderFragment (defined as a static inner class below).
+
                     return PlaceholderFragment.newInstance(position + 1);
             }
         }
@@ -207,7 +212,7 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
                 case 1:
                     return "Confirmation";
                 case 2:
-                    return "Payment";
+                    return "Payment Method";
             }
             return null;
         }
