@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Helper.Helper;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
@@ -55,6 +56,7 @@ public class CreditCartPaymentActivity extends AppCompatActivity {
 
                     Log.d(TAG, "Validation Success, new order " + CenterRepository.getCenterRepository().getSelectedProduct().getName() + " added into repo", null);
 
+                    Toast.makeText(v.getContext(), CenterRepository.getCenterRepository().getSelectedProduct().getName() + "added to order", Toast.LENGTH_SHORT).show();
 //                    goToSelectAddressListActivity();
                 }
             }
