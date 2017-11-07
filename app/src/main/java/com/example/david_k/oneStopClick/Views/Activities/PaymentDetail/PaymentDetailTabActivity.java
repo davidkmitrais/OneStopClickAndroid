@@ -29,6 +29,8 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
 
     private ViewPager mViewPager;
+    Button confBackToAdressButton;
+    Button confContinueToPaymentButton;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +45,7 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
         // Set up the ViewPager with the sections adapter.
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = (ViewPager) findViewById(R.id.payment_tab_view_pager);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
@@ -74,22 +76,36 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
                 TextView addressDeliveryText = (TextView)confirmationFragView.findViewById(R.id.address_detail_delivery_confirmation);
                 TextView addressCityText = (TextView)confirmationFragView.findViewById(R.id.address_detail_city_confirmation);
                 TextView addressStateText = (TextView)confirmationFragView.findViewById(R.id.address_detail_state_confirmation);
-                Button backToAdressButton = (Button)confirmationFragView.findViewById(R.id.back_to_select_address_conf_button);
-                Button continueToPaymentButton = (Button)confirmationFragView.findViewById(R.id.continue_to_payment_conf_button);
+                confBackToAdressButton = (Button)confirmationFragView.findViewById(R.id.back_to_select_address_conf_button);
+                confContinueToPaymentButton = (Button)confirmationFragView.findViewById(R.id.continue_to_payment_conf_button);
+
+                confBackToAdressButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                    }
+                });
+
+                confContinueToPaymentButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
+                    }
+                });
 
                 if (selectedAddress != null) {
                     addressDeliveryText.setText(selectedAddress.getDeliveryAddress());
                     addressCityText.setText(selectedAddress.getCity());
                     addressStateText.setText(selectedAddress.getState());
-                    backToAdressButton.setVisibility(View.INVISIBLE);
-                    continueToPaymentButton.setVisibility(View.VISIBLE);
+                    confBackToAdressButton.setVisibility(View.INVISIBLE);
+                    confContinueToPaymentButton.setVisibility(View.VISIBLE);
                 }
                 else {
                     addressDeliveryText.setText("Please select an address before continue to payment.");
                     addressCityText.setText("");
                     addressStateText.setText("");
-                    continueToPaymentButton.setVisibility(View.INVISIBLE);
-                    backToAdressButton.setVisibility(View.VISIBLE);
+                    confContinueToPaymentButton.setVisibility(View.INVISIBLE);
+                    confBackToAdressButton.setVisibility(View.VISIBLE);
                 }
             }
 

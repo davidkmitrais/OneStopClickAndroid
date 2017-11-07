@@ -4,12 +4,14 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
@@ -24,6 +26,7 @@ public class SelectAddressFragment extends Fragment {
     private FloatingActionButton addNewAdress;
     private RecyclerView recyclerView;
     private SelectAddressViewAdapter adapter;
+    private Button nextButon;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -37,6 +40,16 @@ public class SelectAddressFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), PaymentAddAddressActivity.class);
 
                 startActivity(intent);
+            }
+        });
+
+        nextButon = (Button)rootView.findViewById(R.id.select_address_next_buton);
+        nextButon.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.payment_tab_view_pager);
+                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
             }
         });
 

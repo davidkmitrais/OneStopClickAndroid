@@ -15,6 +15,7 @@ import android.widget.Button;
 import android.widget.EditText;
 
 import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.Helper.Helper;
 import com.example.david_k.oneStopClick.MainActivity;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
@@ -129,32 +130,14 @@ public class PaymentAddAddressActivity extends AppCompatActivity {
     }
 
     private boolean validateAdressInputText(){
-        if (editTextIsEmptyOrNull(addressNameText)
-                || editTextIsEmptyOrNull(deliveryText)
-                || editTextIsEmptyOrNull(cityText)
-                || editTextIsEmptyOrNull(stateText)){
+        if (Helper.editTextIsEmptyOrNull(addressNameText)
+                || Helper.editTextIsEmptyOrNull(deliveryText)
+                || Helper.editTextIsEmptyOrNull(cityText)
+                || Helper.editTextIsEmptyOrNull(stateText)){
 
             return false;
         }
 
         return true;
-    }
-
-    private boolean editTextIsEmptyOrNull(EditText editText){
-        String text = editText.getText().toString();
-
-        if (stringInputIsEmptyOrNull(text)){
-            return true;
-        }
-
-        return false;
-    }
-
-    private boolean stringInputIsEmptyOrNull(String input) {
-        if (input.equals(null) || input.equals("")) {
-            return true;
-        }
-
-        return false;
     }
 }

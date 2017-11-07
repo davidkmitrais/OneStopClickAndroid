@@ -1,9 +1,13 @@
 package com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail;
 
-
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
+import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -45,6 +49,9 @@ public class PaymentMethodFragment extends Fragment {
                     selectedPayment = PaymentMethod.fromViewId(radioGroup.getCheckedRadioButtonId());
                 }
                 catch (IllegalStateException ex){
+
+                    ErrorNextPaymentMethodDialogFragment errorSaveDialogFragment = new ErrorNextPaymentMethodDialogFragment();
+                    errorSaveDialogFragment.show(getFragmentManager(), "PaymentMethodFragment");
                     return;
                 }
 
@@ -88,4 +95,22 @@ public class PaymentMethodFragment extends Fragment {
         return rootView;
     }
 
+
+    public static class ErrorNextPaymentMethodDialogFragment extends DialogFragment {
+
+        @NonNull
+        @Override
+        public Dialog onCreateDialog(Bundle savedInstanceState) {
+            AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
+            builder.setMessage("One of the Payment method should be selected.")
+                    .setNegativeButton("Ok", new DialogInterface.OnClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialog, int which) {
+                            dialog.cancel();
+                        }
+                    });
+
+            return builder.create();
+        }
+    }
 }

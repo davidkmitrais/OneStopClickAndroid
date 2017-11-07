@@ -1,6 +1,5 @@
 package com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail;
 
-
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
@@ -15,9 +14,6 @@ import com.example.david_k.oneStopClick.R;
 
 public class ConfirmationPaymentFragment extends Fragment {
 
-    TextView addressDeliveryText;
-    TextView addressCityText;
-    TextView addressStateText;
 
     public ConfirmationPaymentFragment() {
         // Required empty public constructor
