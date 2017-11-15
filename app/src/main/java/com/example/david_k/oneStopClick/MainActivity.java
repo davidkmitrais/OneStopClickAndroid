@@ -37,7 +37,7 @@ public class MainActivity extends AppCompatActivity
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        SetupProductData();
+//        SetupProductData();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -150,17 +150,17 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onResume() {
         super.onResume();
-        mDataSource.close();
+        //mDataSource.close();
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        mDataSource.open();
+        //mDataSource.open();
     }
 
     //region Database Setup
-
+    //TODO: need to be deleted
     private void SetupProductData(){
 
         mDataSource = new DataSource(this);

@@ -4,12 +4,13 @@ android {
     compileSdkVersion 25
     buildToolsVersion '26.0.2'
     defaultConfig {
-        applicationId "com.example.david_k.onestopclick"
+        applicationId "com.example.david_k.oneStopClick"
         minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        resConfigs "auto"
     }
     buildTypes {
         release {
@@ -36,4 +37,17 @@ dependencies {
     compile 'com.android.support:recyclerview-v7:25.3.1'
     compile 'com.github.bumptech.glide:glide:3.7.0'
     testCompile 'junit:junit:4.12'
+
+    // Firebase dependencies
+    compile 'com.google.firebase:firebase-database:9.6.1'
+    compile 'com.google.firebase:firebase-auth:9.6.1'
+    compile 'com.google.firebase:firebase-storage:9.6.1'
+    compile 'com.google.firebase:firebase-messaging:9.6.1'
+    compile 'com.google.firebase:firebase-config:9.6.1'
+    compile 'com.firebaseui:firebase-ui-auth:0.6.0'
+    compile 'com.firebaseui:firebase-ui-storage:0.6.0'
+    compile 'com.firebase:firebase-client-android:2.3.1'
 }
+
+// apply Firebase SDK
+apply plugin: 'com.google.gms.google-services'

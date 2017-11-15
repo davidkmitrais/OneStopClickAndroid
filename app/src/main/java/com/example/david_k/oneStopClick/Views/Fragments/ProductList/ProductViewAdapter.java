@@ -9,29 +9,34 @@ import android.widget.Filter;
 import android.widget.Filterable;
 
 import com.bumptech.glide.Glide;
+import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.Helper.CustomItemClickListener;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
+import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.firebase.storage.StorageReference;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by David_K on 11/10/2017.
  */
 
-public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> implements Filterable{
+public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> implements Filterable {
 
     private Context context;
     private List<Product> products;
     CustomItemClickListener listener;
     public List<Product> filteredProducts;
+    private StorageReference productPhotoRef;
 
     public ProductViewAdapter(Context context, List<Product> productList, CustomItemClickListener listener) {
         this.context = context;
         this.products = productList;
         this.listener = listener;
         this.filteredProducts = productList;
+        this.productPhotoRef = FirebaseProvider.getCurrentProvider().getProductStorageReference();
     }
 
     @Override
@@ -51,7 +56,11 @@ public class ProductViewAdapter extends RecyclerView.Adapter<ProductViewHolder> 
         Product product = filteredProducts.get(position);
         holder.configureWith(product);
 
-        Glide.with(context).load(product.getImageId()).into(holder.itemPhoto);
+        StorageReference itemPhotoRef = productPhotoRef.child(product.getImageName() + ".jpg");
+
+        Glide.with(context).using(new FirebaseImageLoader())
+                .load(itemPhotoRef)
+                .into(holder.itemPhoto);
     }
 
     @Override

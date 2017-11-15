@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "767044008438",
+    "firebase_url": "https://one-stop-click-davidk.firebaseio.com",
+    "project_id": "one-stop-click-davidk",
+    "storage_bucket": "one-stop-click-davidk.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:767044008438:android:7a9b1858554d2a0f",
+        "android_client_info": {
+          "package_name": "com.example.david_k.oneStopClick"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "767044008438-3jpogvckhilpc5es62ji20ngrs5u1omm.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.david_k.oneStopClick",
+            "certificate_hash": "484d27274303411a36a8bdb10e67c04038bbd746"
+          }
+        },
+        {
+          "client_id": "767044008438-d2ls5hjdq627sljmnmnismpiij962s8v.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD1m3g4R01W8eInoxqYsovZH8H35jPGdj8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "767044008438-d2ls5hjdq627sljmnmnismpiij962s8v.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

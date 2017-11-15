@@ -45,7 +45,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         product = getIntent().getExtras().getParcelable(Constants.productKey);
 
-        numItemOrdered = centerRepositoryHelper.GetOrderQtyByProductId(product.getId());
+        numItemOrdered = 0;//centerRepositoryHelper.GetOrderQtyByProductId(product.getId());
 
         setupUI();
         configureUI();

@@ -17,6 +17,7 @@ public class Product implements Parcelable {
     public String imageName;
     public int imageId;
     public int orderQty;
+    public String firebaseKey;
 
     public Product() {
     }
@@ -35,12 +36,11 @@ public class Product implements Parcelable {
     public String getName(){
         return name;
     }
-    public String getImageName(){
-        return imageName;
-    }
     public int getImageId() { return imageId; }
     public int getPrice() {return price; }
     public int getOrderQty() {return orderQty; }
+    public String getImageName() { return imageName; }
+    public String getFirebaseKey() { return firebaseKey; }
 
     public void setId(int id){
         this.id= id;
@@ -56,6 +56,7 @@ public class Product implements Parcelable {
         this.imageId = imageId;
     }
     public void setOrderQty(int orderQty) {this.orderQty = orderQty; }
+    public void setFirebaseKey(String firebaseKey){this.firebaseKey = firebaseKey; }
 
     public ContentValues toValues() {
         ContentValues values = new ContentValues(4);
