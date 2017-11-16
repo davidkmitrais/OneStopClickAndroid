@@ -34,9 +34,15 @@ public class FirebaseProvider{
     private FirebaseRemoteConfig firebaseRemoteConfig;
 
     private DatabaseReference productDBReference;
+    private DatabaseReference productCartDBReference;
+
     private StorageReference productPhotoStorageRef;
 
     private ChildEventListener productChildEventListener = null;
+
+    public static final String PRODUCT_TABLE = "products";
+    public static final String PRODUCT_CART_TABLE = "product_carts";
+    public static final String PRODUCT_PHOTO_STORAGE = "product_photos";
 
     public static FirebaseProvider getCurrentProvider() {
 
@@ -58,6 +64,10 @@ public class FirebaseProvider{
         return this.productDBReference;
     }
 
+    public DatabaseReference getProductCartDBReference(){
+        return this.productCartDBReference;
+    }
+
     public StorageReference getProductStorageReference(){
         return this.productPhotoStorageRef;
     }
@@ -70,8 +80,11 @@ public class FirebaseProvider{
         firebaseProvider.firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseProvider.firebaseStorage = FirebaseStorage.getInstance();
 
-        // Initialize References
-        firebaseProvider.productDBReference = firebaseProvider.firebaseDatabase.getReference().child("products");
-        firebaseProvider.productPhotoStorageRef = firebaseProvider.firebaseStorage.getReference().child("product_photos");
+        // Initialize Database References
+        firebaseProvider.productDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_TABLE);
+        firebaseProvider.productCartDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_CART_TABLE);
+
+        // Initialize Storage References
+        firebaseProvider.productPhotoStorageRef = firebaseProvider.firebaseStorage.getReference().child(PRODUCT_PHOTO_STORAGE);
     }
 }

@@ -4,8 +4,6 @@ import android.content.ContentValues;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import com.example.david_k.oneStopClick.Database.ProductTable;
-
 /**
  * Created by David_K on 13/10/2017.
  */
@@ -18,6 +16,12 @@ public class Product implements Parcelable {
     public int imageId;
     public int orderQty;
     public String firebaseKey;
+
+    public static final String COLUMN_ID = "id";
+    public static final String COLUMN_NAME = "name";
+    public static final String COLUMN_PRICE = "price";
+    public static final String COLUMN_FIREBASE_KEY = "firebaseKey";
+    public static final String COLUMN_IMAGE_NAME = "imageName";
 
     public Product() {
     }
@@ -59,13 +63,13 @@ public class Product implements Parcelable {
     public void setFirebaseKey(String firebaseKey){this.firebaseKey = firebaseKey; }
 
     public ContentValues toValues() {
-        ContentValues values = new ContentValues(4);
+        ContentValues values = new ContentValues(5);
 
-        values.put(ProductTable.COLUMN_ID, id);
-        values.put(ProductTable.COLUMN_NAME, name);
-        values.put(ProductTable.COLUMN_PRICE, price);
-        values.put(ProductTable.COLUMN_IMAGE_ID, imageId);
-        values.put(ProductTable.COLUMN_IMAGE_NAME, imageName);
+        values.put(COLUMN_ID, id);
+        values.put(COLUMN_NAME, name);
+        values.put(COLUMN_PRICE, price);
+        values.put(COLUMN_FIREBASE_KEY, firebaseKey);
+        values.put(COLUMN_IMAGE_NAME, imageName);
 
         return values;
     }
@@ -81,8 +85,7 @@ public class Product implements Parcelable {
         dest.writeInt(this.price);
         dest.writeString(this.name);
         dest.writeString(this.imageName);
-        dest.writeInt(this.imageId);
-        dest.writeInt(this.orderQty);
+        dest.writeString(this.firebaseKey);
     }
 
     protected Product(Parcel in) {
@@ -90,8 +93,7 @@ public class Product implements Parcelable {
         this.price = in.readInt();
         this.name = in.readString();
         this.imageName = in.readString();
-        this.imageId = in.readInt();
-        this.orderQty = in.readInt();
+        this.firebaseKey = in.readString();
     }
 
     public static final Parcelable.Creator<Product> CREATOR = new Parcelable.Creator<Product>() {

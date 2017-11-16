@@ -17,6 +17,8 @@ import android.view.ViewGroup;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.Helper.OnGetDataListener;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.ProductDetail.ProductDetailActivity;
@@ -24,6 +26,7 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -36,6 +39,7 @@ public class ProductListFragment extends Fragment {
 
     private DatabaseReference productDatabaseReference;
     private List<Product> allProduct;
+    private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
     public ProductListFragment() {
         // Required empty public constructor
@@ -127,27 +131,30 @@ public class ProductListFragment extends Fragment {
     }
 
     private void rowTapped(int position) {
-        int productId = adapter.filteredProducts.get(position).getId();
 
-        final Product[] product = new Product[1];
+        String key = adapter.filteredProducts.get(position).getFirebaseKey();
 
-        FirebaseProvider.getCurrentProvider().getProductDBReference()
-                .orderByChild("id").equalTo(productId)
-                .addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(DataSnapshot dataSnapshot) {
-                        for (DataSnapshot itemData : dataSnapshot.getChildren()) {
-                            product[0] = itemData.getValue(Product.class);
-                            goToProductDetail(product[0]);
-                            break;
-                        }
-                    }
+        Query query = FirebaseProvider.getCurrentProvider().getProductDBReference().orderByKey().equalTo(key);
+        firebaseProviderHelper.getDataSnapshotOnceFromQuery(query, new OnGetDataListener() {
+            @Override
+            public void onStart() {
 
-                    @Override
-                    public void onCancelled(DatabaseError databaseError) {
-                        Log.e("ProductListFragment", "Failed to get product : " + databaseError.getMessage(), null);
-                    }
-                });
+            }
+
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                for (DataSnapshot itemData : data.getChildren()) {
+                    Product product = itemData.getValue(Product.class);
+                    product.setFirebaseKey(itemData.getKey());
+                    goToProductDetail(product);
+                }
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     private void goToProductDetail(Product product){

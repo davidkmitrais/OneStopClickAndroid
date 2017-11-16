@@ -1,7 +1,6 @@
 package com.example.david_k.oneStopClick.Views.Activities.ProductDetail;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -9,6 +8,7 @@ import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -16,17 +16,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
+import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.Helper.OnGetDataListener;
 import com.example.david_k.oneStopClick.MainActivity;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
+import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.Query;
 
 public class ProductDetailActivity extends AppCompatActivity {
 
     private static final String TAG = "ProductDetailActivity";
     private Product product;
     private int numItemOrdered;
+    private String productFirebaseKey;
 
     private ImageView productImage;
     private TextView nameTextView;
@@ -36,7 +43,9 @@ public class ProductDetailActivity extends AppCompatActivity {
     private ImageButton minusItemCartButton;
     private TextView itemOrderedEditText;
     private CartAddedDialogFragment cartAddedDialog;
-    private CenterRepositoryHelper centerRepositoryHelper = new CenterRepositoryHelper();
+    private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
+
+    private boolean isNewCart;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,12 +53,14 @@ public class ProductDetailActivity extends AppCompatActivity {
         setContentView(R.layout.activity_product_detail);
 
         product = getIntent().getExtras().getParcelable(Constants.productKey);
-
-        numItemOrdered = 0;//centerRepositoryHelper.GetOrderQtyByProductId(product.getId());
+        isNewCart = true;
 
         setupUI();
-        configureUI();
 
+        productFirebaseKey = product.getFirebaseKey();
+        setOrderQtyByProductKey(productFirebaseKey);
+
+        configureUI();
     }
 
     @Override
@@ -102,8 +113,8 @@ public class ProductDetailActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Toast.makeText(v.getContext(), "added to cart", Toast.LENGTH_SHORT).show();
 
-                // Update Order Qty
-                centerRepositoryHelper.SetOrderQtyByProductId(product.getId(), numItemOrdered);
+                // Add / Update Cart Order
+                firebaseProviderHelper.setOrderQtyForProductCart(isNewCart, numItemOrdered, productFirebaseKey);
 
                 cartAddedDialog = new CartAddedDialogFragment();
                 cartAddedDialog.show(getSupportFragmentManager(), "CartAddedDialogFragment");
@@ -147,15 +158,10 @@ public class ProductDetailActivity extends AppCompatActivity {
     }
 
     private void configureUI() {
-        productImage.setImageResource(product.imageId);
+
+        firebaseProviderHelper.setupProductPhoto(this, product.getImageName(), productImage);
         nameTextView.setText(product.name);
         priceTextView.setText(String.valueOf(product.price));
-
-        setTextForItemOrdered();
-    }
-
-    public static int getImageId(Context context, String imageName) {
-        return context.getResources().getIdentifier("drawable/" + imageName, null, context.getPackageName());
     }
 
     private void setTextForItemOrdered(){
@@ -164,5 +170,40 @@ public class ProductDetailActivity extends AppCompatActivity {
         }
 
         itemOrderedEditText.setText(String.valueOf(numItemOrdered));
+    }
+
+    public void setOrderQtyByProductKey(String productKey){
+
+        Query query = FirebaseProvider.getCurrentProvider().getProductCartDBReference()
+                .orderByChild(ProductCart.COLUMN_PRODUCT_KEY).equalTo(productKey);
+
+        firebaseProviderHelper.getDataSnapshotOnceFromQuery(query, new OnGetDataListener() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                if (!data.hasChildren()){
+                    numItemOrdered = 0;
+                    isNewCart = true;
+                }
+
+                for (DataSnapshot itemData : data.getChildren()) {
+                    numItemOrdered = itemData.child(ProductCart.COLUMN_ORDER_QTY).getValue(int.class);
+                    isNewCart = false;
+                    break;
+                }
+
+                setTextForItemOrdered();
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+                Log.w(TAG, "Failed to get product cart : " + databaseError.getMessage(), null);
+            }
+        });
+
     }
 }
