@@ -1,5 +1,8 @@
 package com.example.david_k.oneStopClick.ModelLayers.Database;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import com.google.firebase.database.Exclude;
 
 import java.util.HashMap;
@@ -9,7 +12,7 @@ import java.util.Map;
  * Created by David_K on 15/11/2017.
  */
 
-public class ProductCart {
+public class ProductCart implements Parcelable {
 
     public String productKey;
     public int orderQty;
@@ -27,7 +30,39 @@ public class ProductCart {
 
     public String getProductKey() {return this.productKey;}
     public int getOrderQty() {return this.orderQty;}
+    public String getFirebaseKey() { return firebaseKey; }
 
     public void setProductKey(String productKey){this.productKey = productKey;}
     public void setOrderQty(int orderQty){this.orderQty = orderQty;}
+    public void setFirebaseKey(String firebaseKey){this.firebaseKey = firebaseKey; }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeString(productKey);
+        dest.writeInt(orderQty);
+        dest.writeString(firebaseKey);
+    }
+
+    protected ProductCart(Parcel in) {
+        productKey = in.readString();
+        orderQty = in.readInt();
+        firebaseKey = in.readString();
+    }
+
+    public static final Creator<ProductCart> CREATOR = new Creator<ProductCart>() {
+        @Override
+        public ProductCart createFromParcel(Parcel in) {
+            return new ProductCart(in);
+        }
+
+        @Override
+        public ProductCart[] newArray(int size) {
+            return new ProductCart[size];
+        }
+    };
 }

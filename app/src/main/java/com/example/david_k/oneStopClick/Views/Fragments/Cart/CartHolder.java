@@ -35,15 +35,13 @@ public class CartHolder extends RecyclerView.ViewHolder {
         minusButton = (ImageButton) itemView.findViewById(R.id.cart_minus_item);
     }
 
-    public void configureWith(Product product) {
-        String price = String.valueOf(product.price);
-        int totalPrice = product.price * product.orderQty;
+    public void configureWith(Product product, int orderQty) {
+        String price = String.valueOf(product.getPrice());
+        int totalPrice = product.getPrice() * orderQty;
 
-        cartProductName.setText(product.name);
+        cartProductName.setText(product.getName());
         cartProductPrice.setText("Price (USD) : " + price);
         cartProductTotalPrice.setText(totalPrice + " USD");
-        cartOrderQty.setText(String.valueOf(product.orderQty));
-
-        //itemPhoto.setImageResource(product.imageId);
+        cartOrderQty.setText(String.valueOf(orderQty));
     }
 }

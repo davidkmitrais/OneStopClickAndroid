@@ -7,13 +7,21 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
-import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
+import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.Helper.CustomItemClickListener;
+import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.Helper.OnGetDataListener;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
+import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by David_K on 24/10/2017.
@@ -22,13 +30,18 @@ import java.util.List;
 public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
     private Context context;
     CustomItemClickListener listener;
-    public List<Product> cartProducts;
-    private CenterRepositoryHelper centerRepositoryHelper = new CenterRepositoryHelper();
 
-    public CartAdapter(Context context, List<Product> cartProductList, CustomItemClickListener listener) {
+    public List<ProductCart> cartProducts;
+    private Map<String, Integer> productPriceRef;
+    private DatabaseReference productDBRef;
+    private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
+
+    public CartAdapter(Context context, List<ProductCart> cartProductList, CustomItemClickListener listener) {
         this.context = context;
         this.cartProducts = cartProductList;
         this.listener = listener;
+        this.productDBRef = FirebaseProvider.getCurrentProvider().getProductDBReference();
+        this.productPriceRef = new HashMap<>();
     }
 
     @Override
@@ -43,44 +56,35 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         holder.addButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Product currentProduct = cartProducts.get(holder.getAdapterPosition());
-                int plusCartOrderQty = currentProduct.getOrderQty() + 1;
-                centerRepositoryHelper.SetOrderQtyByProductId(currentProduct.getId(), plusCartOrderQty);
+                ProductCart currentProductCart = cartProducts.get(holder.getAdapterPosition());
+                int plusCartOrderQty = currentProductCart.getOrderQty() + 1;
+                int price = productPriceRef.get(currentProductCart.getProductKey());
+                int totalPrice = plusCartOrderQty * price;
 
-                updateTextsForCart(currentProduct.getId());
-            }
-
-            private void updateTextsForCart(int productId){
-                int numItemOrdered = centerRepositoryHelper.GetOrderQtyByProductId(productId);
-                int price = centerRepositoryHelper.GetProductById(productId).getPrice();
-                int totalPrice = numItemOrdered * price;
-
-                holder.cartOrderQty.setText(String.valueOf(numItemOrdered));
+                holder.cartOrderQty.setText(String.valueOf(plusCartOrderQty));
                 holder.cartProductTotalPrice.setText(totalPrice + " USD");
+
+                currentProductCart.setOrderQty(plusCartOrderQty);
             }
         });
 
         holder.minusButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Product currentProduct = cartProducts.get(holder.getAdapterPosition());
-                int minusCartOrderQty = currentProduct.getOrderQty() - 1;
+
+                ProductCart currentProductCart = cartProducts.get(holder.getAdapterPosition());
+                int minusCartOrderQty = currentProductCart.getOrderQty() - 1;
                 if (minusCartOrderQty < 1) {
                     minusCartOrderQty = 1;
                     Toast.makeText(context, "show remove item dialog", Toast.LENGTH_SHORT);
                 }
-                centerRepositoryHelper.SetOrderQtyByProductId(currentProduct.getId(), minusCartOrderQty);
+                int price = productPriceRef.get(currentProductCart.getProductKey());
+                int totalPrice = minusCartOrderQty * price;
 
-                updateTextsForCart(currentProduct.getId());
-            }
-
-            private void updateTextsForCart(int productId){
-                int numItemOrdered = centerRepositoryHelper.GetOrderQtyByProductId(productId);
-                int price = centerRepositoryHelper.GetProductById(productId).getPrice();
-                int totalPrice = numItemOrdered * price;
-
-                holder.cartOrderQty.setText(String.valueOf(numItemOrdered));
+                holder.cartOrderQty.setText(String.valueOf(minusCartOrderQty));
                 holder.cartProductTotalPrice.setText(totalPrice + " USD");
+
+                currentProductCart.setOrderQty(minusCartOrderQty);
             }
         });
 
@@ -89,10 +93,34 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
 
     @Override
     public void onBindViewHolder(CartHolder holder, int position) {
-        Product product = cartProducts.get(position);
-        holder.configureWith(product);
+        ProductCart productCart = cartProducts.get(position);
+        String productKey = productCart.getProductKey();
+        int orderQty = productCart.getOrderQty();
+        
+        Query query = productDBRef.orderByKey().equalTo(productKey);
+        firebaseProviderHelper.getDataSnapshotOnceFromQuery(query, new OnGetDataListener() {
+            @Override
+            public void onStart() {
+                
+            }
 
-        Glide.with(context).load(product.getImageId()).into(holder.productPhoto);
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                for (DataSnapshot dataItem: data.getChildren()) {
+                    Product product = dataItem.getValue(Product.class);
+
+                    productPriceRef.put(dataItem.getKey(), product.getPrice());
+
+                    holder.configureWith(product, orderQty);
+                    firebaseProviderHelper.setupProductPhoto(context, product.getImageName(), holder.productPhoto);
+                }
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+
+            }
+        });
     }
 
     @Override

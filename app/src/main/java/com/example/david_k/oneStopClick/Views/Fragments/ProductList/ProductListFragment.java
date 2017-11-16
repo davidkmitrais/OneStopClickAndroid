@@ -27,7 +27,6 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -64,17 +63,17 @@ public class ProductListFragment extends Fragment {
         productDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                getAllTask(dataSnapshot);
+                getAllProduct(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                getAllTask(dataSnapshot);
+                getAllProduct(dataSnapshot);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                taskDeletion(dataSnapshot);
+                productDeletion(dataSnapshot);
             }
 
             @Override
@@ -165,7 +164,7 @@ public class ProductListFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void getAllTask(DataSnapshot dataSnapshot){
+    private void getAllProduct(DataSnapshot dataSnapshot){
         Product product = dataSnapshot.getValue(Product.class);
         product.setFirebaseKey(dataSnapshot.getKey());
         allProduct.add(product);
@@ -173,7 +172,7 @@ public class ProductListFragment extends Fragment {
         recyclerView.setAdapter(adapter);
     }
 
-    private void taskDeletion(DataSnapshot dataSnapshot){
+    private void productDeletion(DataSnapshot dataSnapshot){
         for(DataSnapshot singleSnapshot : dataSnapshot.getChildren()) {
             Product product = singleSnapshot.getValue(Product.class);
             for(int i = 0; i < allProduct.size(); i++){
