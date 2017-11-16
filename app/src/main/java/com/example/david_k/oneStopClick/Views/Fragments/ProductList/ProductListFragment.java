@@ -36,7 +36,6 @@ public class ProductListFragment extends Fragment {
     private RecyclerView recyclerView;
     private ProductViewAdapter adapter;
 
-    private DatabaseReference productDatabaseReference;
     private List<Product> allProduct;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
@@ -53,8 +52,8 @@ public class ProductListFragment extends Fragment {
     }
 
     private void setupRecyclerView(View view){
-        allProduct = new ArrayList<Product>();
-        productDatabaseReference = FirebaseProvider.getCurrentProvider().getProductDBReference();
+        allProduct = new ArrayList<>();
+        DatabaseReference productDatabaseReference = FirebaseProvider.getCurrentProvider().getProductDBReference();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.product_list_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());

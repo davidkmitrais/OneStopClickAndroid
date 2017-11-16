@@ -1,5 +1,6 @@
 package com.example.david_k.oneStopClick.Views.Fragments.Cart;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,15 +24,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-/**
- * Created by David_K on 24/10/2017.
- */
-
 public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
     private Context context;
-    CustomItemClickListener listener;
+    private CustomItemClickListener listener;
 
-    public List<ProductCart> cartProducts;
+    List<ProductCart> cartProducts;
     private Map<String, Integer> productPriceRef;
     private DatabaseReference productDBRef;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
@@ -44,6 +41,7 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
         this.productPriceRef = new HashMap<>();
     }
 
+    @SuppressLint("SetTextI18n")
     @Override
     public CartHolder onCreateViewHolder(ViewGroup parent, int viewType) {
 
@@ -53,39 +51,33 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
 
         cartView.setOnClickListener(v -> listener.onItemClick(v, holder.getAdapterPosition()));
 
-        holder.addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ProductCart currentProductCart = cartProducts.get(holder.getAdapterPosition());
-                int plusCartOrderQty = currentProductCart.getOrderQty() + 1;
-                int price = productPriceRef.get(currentProductCart.getProductKey());
-                int totalPrice = plusCartOrderQty * price;
+        holder.addButton.setOnClickListener(v -> {
+            ProductCart currentProductCart = cartProducts.get(holder.getAdapterPosition());
+            int plusCartOrderQty = currentProductCart.getOrderQty() + 1;
+            int price = productPriceRef.get(currentProductCart.getProductKey());
+            int totalPrice = plusCartOrderQty * price;
 
-                holder.cartOrderQty.setText(String.valueOf(plusCartOrderQty));
-                holder.cartProductTotalPrice.setText(totalPrice + " USD");
+            holder.cartOrderQty.setText(String.valueOf(plusCartOrderQty));
+            holder.cartProductTotalPrice.setText(totalPrice + " USD");
 
-                currentProductCart.setOrderQty(plusCartOrderQty);
-            }
+            currentProductCart.setOrderQty(plusCartOrderQty);
         });
 
-        holder.minusButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        holder.minusButton.setOnClickListener(v -> {
 
-                ProductCart currentProductCart = cartProducts.get(holder.getAdapterPosition());
-                int minusCartOrderQty = currentProductCart.getOrderQty() - 1;
-                if (minusCartOrderQty < 1) {
-                    minusCartOrderQty = 1;
-                    Toast.makeText(context, "show remove item dialog", Toast.LENGTH_SHORT);
-                }
-                int price = productPriceRef.get(currentProductCart.getProductKey());
-                int totalPrice = minusCartOrderQty * price;
-
-                holder.cartOrderQty.setText(String.valueOf(minusCartOrderQty));
-                holder.cartProductTotalPrice.setText(totalPrice + " USD");
-
-                currentProductCart.setOrderQty(minusCartOrderQty);
+            ProductCart currentProductCart = cartProducts.get(holder.getAdapterPosition());
+            int minusCartOrderQty = currentProductCart.getOrderQty() - 1;
+            if (minusCartOrderQty < 1) {
+                minusCartOrderQty = 1;
+                Toast.makeText(context, "show remove item dialog", Toast.LENGTH_SHORT).show();
             }
+            int price = productPriceRef.get(currentProductCart.getProductKey());
+            int totalPrice = minusCartOrderQty * price;
+
+            holder.cartOrderQty.setText(String.valueOf(minusCartOrderQty));
+            holder.cartProductTotalPrice.setText(totalPrice + " USD");
+
+            currentProductCart.setOrderQty(minusCartOrderQty);
         });
 
         return holder;
@@ -107,7 +99,8 @@ public class CartAdapter extends RecyclerView.Adapter<CartHolder> {
             @Override
             public void onSuccess(DataSnapshot data) {
                 for (DataSnapshot dataItem: data.getChildren()) {
-                    Product product = dataItem.getValue(Product.class);
+                    Product product;
+                    product = dataItem.getValue(Product.class);
 
                     productPriceRef.put(dataItem.getKey(), product.getPrice());
 

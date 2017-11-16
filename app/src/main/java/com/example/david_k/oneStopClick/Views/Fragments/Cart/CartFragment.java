@@ -1,5 +1,6 @@
 package com.example.david_k.oneStopClick.Views.Fragments.Cart;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -25,22 +26,18 @@ import com.google.firebase.database.DatabaseReference;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * Created by David_K on 12/10/2017.
- */
-
 public class CartFragment extends Fragment {
 
     private RecyclerView recyclerView;
     private CartAdapter adapter;
 
-    private DatabaseReference productCartDatabaseReference;
     List<ProductCart> productCartList;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        @SuppressLint("InflateParams")
         View view =  inflater.inflate(R.layout.cart_fragment, null);
 
         setupRecyclerView(view);
@@ -49,8 +46,8 @@ public class CartFragment extends Fragment {
     }
 
     private void setupRecyclerView(View view){
-        productCartList = new ArrayList<ProductCart>();
-        productCartDatabaseReference = FirebaseProvider.getCurrentProvider().getProductCartDBReference();
+        productCartList = new ArrayList<>();
+        DatabaseReference productCartDatabaseReference = FirebaseProvider.getCurrentProvider().getProductCartDBReference();
 
         recyclerView = (RecyclerView) view.findViewById(R.id.cardCell_item);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
