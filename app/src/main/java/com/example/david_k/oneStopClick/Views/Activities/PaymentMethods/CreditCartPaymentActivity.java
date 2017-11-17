@@ -54,9 +54,9 @@ public class CreditCartPaymentActivity extends AppCompatActivity {
 //
 //                    CenterRepository.getCenterRepository().addToAddressList(newAddress);
 
-                    Log.d(TAG, "Validation Success, new order " + CenterRepository.getCenterRepository().getSelectedProduct().getName() + " added into repo", null);
+                    //Log.d(TAG, "Validation Success, new order " + CenterRepository.getCenterRepository().getSelectedProduct().getName() + " added into repo", null);
 
-                    Toast.makeText(v.getContext(), CenterRepository.getCenterRepository().getSelectedProduct().getName() + "added to order", Toast.LENGTH_SHORT).show();
+                    //Toast.makeText(v.getContext(), CenterRepository.getCenterRepository().getSelectedProduct().getName() + "added to order", Toast.LENGTH_SHORT).show();
 //                    goToSelectAddressListActivity();
                 }
             }

@@ -14,11 +14,20 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
+import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress.PaymentAddAddressActivity;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class SelectAddressFragment extends Fragment {
@@ -27,6 +36,9 @@ public class SelectAddressFragment extends Fragment {
     private RecyclerView recyclerView;
     private SelectAddressViewAdapter adapter;
     private Button nextButon;
+    private FirebaseProviderHelper firebaseHelper = new FirebaseProviderHelper();
+
+    private List<Address> addressList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -34,34 +46,95 @@ public class SelectAddressFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.fragment_payment_detail_select_address, container, false);
 
         addNewAdress = (FloatingActionButton) rootView.findViewById(R.id.add_new_address_button);
-        addNewAdress.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getActivity(), PaymentAddAddressActivity.class);
+        addNewAdress.setOnClickListener(v -> {
+            Intent intent = new Intent(getActivity(), PaymentAddAddressActivity.class);
 
-                startActivity(intent);
-            }
+            startActivity(intent);
         });
 
         nextButon = (Button)rootView.findViewById(R.id.select_address_next_buton);
-        nextButon.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        nextButon.setOnClickListener(v -> {
 
-                ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.payment_tab_view_pager);
-                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-            }
+            ViewPager viewPager = (ViewPager) getActivity().findViewById(R.id.payment_tab_view_pager);
+            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
         });
 
-        recyclerView = (RecyclerView) rootView.findViewById(R.id.address_list_recycler_view);
-        List<Address> addresses = CenterRepository.getCenterRepository().getListOfAddress();
-        adapter = new SelectAddressViewAdapter(getActivity(), addresses, (v, position) -> rowTapped(v, recyclerView, position));
+        setupRecyclerView(rootView);
 
-        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(layoutManager);
-        recyclerView.setAdapter(adapter);
+//        recyclerView = (RecyclerView) rootView.findViewById(R.id.address_list_recycler_view);
+//        List<Address> addresses = new CenterRepositoryHelper().setDummySelecetedAddressList(); //CenterRepository.getCenterRepository().getListOfAddress();
+//        adapter = new SelectAddressViewAdapter(getActivity(), addresses, (v, position) -> rowTapped(v, recyclerView, position));
+//
+//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
+//        recyclerView.setLayoutManager(layoutManager);
+//        recyclerView.setAdapter(adapter);
 
         return rootView;
+    }
+
+    private void setupRecyclerView(View view){
+        addressList = new ArrayList<>();
+        DatabaseReference addressListDBRef = FirebaseProvider.getCurrentProvider().getAddressDBReference()
+                .child(Address.CHILD_ADDRESS_LIST);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.address_list_recycler_view);
+        RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(mLayoutManager);
+
+        addressListDBRef
+//                .addListenerForSingleValueEvent(new ValueEventListener() {
+//            @Override
+//            public void onDataChange(DataSnapshot dataSnapshot) {
+//                getAllAddress(dataSnapshot);
+//            }
+//
+//            @Override
+//            public void onCancelled(DatabaseError databaseError) {
+//
+//            }
+//
+//            private void getAllAddress(DataSnapshot dataSnapshot){
+//                Address address = dataSnapshot.getValue(Address.class);
+//                address.setFirebaseKey(dataSnapshot.getKey());
+//                addressList.add(address);
+//                adapter = new SelectAddressViewAdapter(getActivity(), addressList, (v, position) -> rowTapped(v, recyclerView, position));
+//                recyclerView.setAdapter(adapter);
+//            }
+//        });
+            .addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                getAllAddress(dataSnapshot);
+            }
+
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+                getAllAddress(dataSnapshot);
+            }
+
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
+                //productDeletion(dataSnapshot);
+            }
+
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+
+            private void getAllAddress(DataSnapshot dataSnapshot){
+                Address address = dataSnapshot.getValue(Address.class);
+                address.setFirebaseKey(dataSnapshot.getKey());
+                addressList.add(address);
+                adapter = new SelectAddressViewAdapter(getActivity(), addressList, (v, position) -> rowTapped(v, recyclerView, position));
+                recyclerView.setAdapter(adapter);
+            }
+        });
     }
 
     private void rowTapped(View view, RecyclerView recyclerView, int position) {
@@ -75,7 +148,6 @@ public class SelectAddressFragment extends Fragment {
             TextView childSelectedText = (TextView) childView.findViewById(R.id.selected_address_text);
             boolean isSelectedTextDisplayed = childSelectedText.getVisibility() == View.VISIBLE;
             if (isSelectedTextDisplayed) {
-                CenterRepository.getCenterRepository().deleteSelectedAddress();
                 childSelectedText.setVisibility(View.INVISIBLE);
                 Log.d("SelectAddressFragment", "Remove selected text at : " + i);
             }
@@ -84,16 +156,15 @@ public class SelectAddressFragment extends Fragment {
         TextView selectedText = (TextView) view.findViewById(R.id.selected_address_text);
         boolean isSelectedTextDisplayed = selectedText.getVisibility() == View.VISIBLE;
 
-        List<Address> addresses = CenterRepository.getCenterRepository().getListOfAddress();
-        Address address = addresses.get(position);
+        Address address = addressList.get(position);
 
         if (isSelectedTextDisplayed) {
-            CenterRepository.getCenterRepository().deleteSelectedAddress();
+            firebaseHelper.updateSelectedAddress("not set");
             selectedText.setVisibility(View.INVISIBLE);
             Log.d("SelectAddressFragment", "Un-Select for : " + address.getAddressName());
         }
         else {
-            CenterRepository.getCenterRepository().setSelectedAddress(address);
+            firebaseHelper.updateSelectedAddress(address.getFirebaseKey());
             selectedText.setVisibility(View.VISIBLE);
             Log.d("SelectAddressFragment", "Select for : " + address.getAddressName());
         }

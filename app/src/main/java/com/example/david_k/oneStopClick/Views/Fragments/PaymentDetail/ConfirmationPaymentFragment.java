@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
@@ -32,7 +33,7 @@ public class ConfirmationPaymentFragment extends Fragment {
 
     private void setupUI(View rootView) {
 
-        Product selectedProduct = CenterRepository.getCenterRepository().getSelectedProduct();
+        Product selectedProduct = new CenterRepositoryHelper().setDummySelecetedProduct();
 
         TextView productNameText = (TextView)rootView.findViewById(R.id.product_detail_name_confirmation);
         TextView productOrderQtyText = (TextView)rootView.findViewById(R.id.product_detail_orderQty_confirmation);

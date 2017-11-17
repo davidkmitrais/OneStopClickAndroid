@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
@@ -28,8 +29,8 @@ public class CashOnDeliveryPaymentActivity extends AppCompatActivity {
 
     private void setupUI() {
 
-        Product selectedProduct = CenterRepository.getCenterRepository().getSelectedProduct();
-        Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
+        Product selectedProduct = new CenterRepositoryHelper().setDummySelecetedProduct();
+        Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();
 
         TextView productNameText = (TextView) findViewById(R.id.product_detail_name_cod);
         TextView productOrderQtyText = (TextView) findViewById(R.id.product_detail_orderQty_cod);

@@ -87,7 +87,7 @@ public class PaymentMethodFragment extends Fragment {
 
             private void setSelectedPaymentMethodToRepository(int selectedPaymentMethodId){
                 PaymentMethod selectedPaymentMethod = PaymentMethod.fromViewId(selectedPaymentMethodId);
-                CenterRepository.getCenterRepository().setSelectedPaymentMethod(selectedPaymentMethod);
+                //CenterRepository.getCenterRepository().setSelectedPaymentMethod(selectedPaymentMethod);
                 Log.d("PaymentMethodFragment", "setSelectedPaymentMethodToRepository: " + selectedPaymentMethod);
             }
         });

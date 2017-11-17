@@ -14,6 +14,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
@@ -37,7 +38,7 @@ public class PaypalReviewFragment extends Fragment {
         // Inflate the layout for this fragment
         View rootView = inflater.inflate(R.layout.fragment_paypal_review, container, false);
 
-        Product product = CenterRepository.getCenterRepository().getSelectedProduct();
+        Product product = new CenterRepositoryHelper().setDummySelecetedProduct();//CenterRepository.getCenterRepository().getSelectedProduct();
 
         String productDetailStr = product.getName() + ": " + product.getOrderQty() + " pcs";
         String productPriceStr = "$" +  product.getOrderQty() * product.getPrice() + " USD";
@@ -48,7 +49,7 @@ public class PaypalReviewFragment extends Fragment {
         productDetailText.setText(productDetailStr);
         productPriceText.setText(productPriceStr);
 
-        Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
+        Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();//CenterRepository.getCenterRepository().getSelectedAddress();
 
         TextView addressDelivery = (TextView) rootView.findViewById(R.id.address_line1_detail_info_paypal_review_text);
         TextView addressCityState = (TextView) rootView.findViewById(R.id.address_line2_detail_info_paypal_review_text);
@@ -74,7 +75,7 @@ public class PaypalReviewFragment extends Fragment {
         @Override
         public Dialog onCreateDialog(Bundle savedInstanceState) {
 
-            Product product = CenterRepository.getCenterRepository().getSelectedProduct();
+            Product product = new CenterRepositoryHelper().setDummySelecetedProduct();//CenterRepository.getCenterRepository().getSelectedProduct();
             String productPriceStr = "$" +  product.getOrderQty() * product.getPrice() + " USD";
 
             AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());

@@ -17,6 +17,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
@@ -67,7 +68,7 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
             }
 
             private void setupSelectedAddressTexts() {
-                Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
+                Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();
 
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 ConfirmationPaymentFragment confirmationFragment = (ConfirmationPaymentFragment) fragmentManager.findFragmentById(R.id.confirmation_payment_fragment);
@@ -170,7 +171,8 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
             View rootView = inflater.inflate(R.layout.fragment_payment_tab, container, false);
             TextView textView = (TextView) rootView.findViewById(R.id.section_label);
             textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
+
+            Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();;
             String addressName;
             if (selectedAddress == null) {
                 addressName = "NOT SET";

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
 
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.Views.Fragments.PayPalPayment.PayPalLoginFragment;
@@ -30,7 +31,7 @@ public class PaypalPaymentActivity extends AppCompatActivity {
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction().replace(R.id.paypal_frame, fragment).commit();
 
-        Product selectedProduct = CenterRepository.getCenterRepository().getSelectedProduct();
+        Product selectedProduct = new CenterRepositoryHelper().setDummySelecetedProduct();//CenterRepository.getCenterRepository().getSelectedProduct();
         int totalPrice = selectedProduct.getPrice() * selectedProduct.getOrderQty();
         TextView infoTotalText = (TextView) findViewById(R.id.paypal_total_info_text);
         infoTotalText.setText("My Total : " + String.valueOf(totalPrice) + " USD");

@@ -35,6 +35,7 @@ public class FirebaseProvider{
 
     private DatabaseReference productDBReference;
     private DatabaseReference productCartDBReference;
+    private DatabaseReference addressCartDBReference;
 
     private StorageReference productPhotoStorageRef;
 
@@ -42,6 +43,7 @@ public class FirebaseProvider{
 
     public static final String PRODUCT_TABLE = "products";
     public static final String PRODUCT_CART_TABLE = "product_carts";
+    public static final String ADDRESS_TABLE = "address";
     public static final String PRODUCT_PHOTO_STORAGE = "product_photos";
 
     public static FirebaseProvider getCurrentProvider() {
@@ -68,6 +70,10 @@ public class FirebaseProvider{
         return this.productCartDBReference;
     }
 
+    public DatabaseReference getAddressDBReference(){
+        return this.addressCartDBReference;
+    }
+
     public StorageReference getProductStorageReference(){
         return this.productPhotoStorageRef;
     }
@@ -83,6 +89,7 @@ public class FirebaseProvider{
         // Initialize Database References
         firebaseProvider.productDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_TABLE);
         firebaseProvider.productCartDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_CART_TABLE);
+        firebaseProvider.addressCartDBReference = firebaseProvider.firebaseDatabase.getReference().child(ADDRESS_TABLE);
 
         // Initialize Storage References
         firebaseProvider.productPhotoStorageRef = firebaseProvider.firebaseStorage.getReference().child(PRODUCT_PHOTO_STORAGE);

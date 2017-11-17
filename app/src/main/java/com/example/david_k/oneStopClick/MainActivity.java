@@ -12,32 +12,19 @@ import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.david_k.oneStopClick.Database.DataSource;
-import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.Helper.Constants;
-import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
-import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
-import com.example.david_k.oneStopClick.ModelLayers.SampleProductProvider;
 import com.example.david_k.oneStopClick.Views.Fragments.About.AboutFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.Admin.AdminFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.Cart.CartFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.ProductList.ProductListFragment;
 
-import java.util.List;
-
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
-
-    DataSource mDataSource;
-    private List<Product> productList = SampleProductProvider.productList;
-    CenterRepositoryHelper centerRepositoryHelper = new CenterRepositoryHelper();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
-//        SetupProductData();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -146,33 +133,4 @@ public class MainActivity extends AppCompatActivity
         drawer.closeDrawer(GravityCompat.START);
         return true;
     }
-
-    @Override
-    public void onResume() {
-        super.onResume();
-        //mDataSource.close();
-    }
-
-    @Override
-    public void onPause() {
-        super.onPause();
-        //mDataSource.open();
-    }
-
-    //region Database Setup
-    //TODO: need to be deleted
-    private void SetupProductData(){
-
-        mDataSource = new DataSource(this);
-        mDataSource.open();
-        mDataSource.seedDatabase(productList);
-
-        List<Product> productListFromDB = mDataSource.getAllItems();
-
-        if (!centerRepositoryHelper.IsProductSetOnCenterRepository()) {
-            CenterRepository.getCenterRepository().setListOfProductsInShoppingList(productListFromDB);
-            CenterRepository.getCenterRepository().setDummyAddressDefault();
-        }
-    }
-    //endregion
 }

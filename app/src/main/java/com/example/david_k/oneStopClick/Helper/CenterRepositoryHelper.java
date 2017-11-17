@@ -1,7 +1,11 @@
 package com.example.david_k.oneStopClick.Helper;
 
-import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
+import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
+import com.example.david_k.oneStopClick.R;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by David_K on 25/10/2017.
@@ -9,28 +13,11 @@ import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 
 public class CenterRepositoryHelper {
 
-    public Product GetProductById(int productId){
-        return CenterRepository.getCenterRepository()
-                .getProductById(productId);
+    public Product setDummySelecetedProduct() {
+        return new Product(99,"dummy product", 999, R.drawable.product001, "product001");
     }
 
-    public int GetOrderQtyByProductId(int productId){
-        return CenterRepository.getCenterRepository()
-                .getProductById(productId)
-                .getOrderQty();
-    }
-
-    public void SetOrderQtyByProductId(int productId, int orderQty){
-        CenterRepository.getCenterRepository()
-                .getProductById(productId)
-                .setOrderQty(orderQty);
-    }
-
-    public boolean IsProductSetOnCenterRepository(){
-        int size = CenterRepository.getCenterRepository()
-                        .getListOfProductsInShoppingList()
-                        .size();
-
-        return size > 0;
+    public Address setDummySelecetedAddress() {
+        return new Address("name","delivery","city","state");
     }
 }

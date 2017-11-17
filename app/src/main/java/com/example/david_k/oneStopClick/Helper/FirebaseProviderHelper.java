@@ -6,8 +6,10 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
+import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +43,27 @@ public class FirebaseProviderHelper {
             }
         });
     }
+
+    public void getDataSnapshotOnceFromDBRef(DatabaseReference databaseReference, OnGetDataListener listener){
+
+        listener.onStart();
+
+        databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                Log.d(TAG, "Success to getDataSnapshotOnceFromQuery : " + dataSnapshot.getKey(), null);
+                listener.onSuccess(dataSnapshot);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.w(TAG, "Failed to getDataSnapshotOnceFromQuery : " + databaseError.getMessage(), null);
+                listener.onFailed(databaseError);
+            }
+        });
+    }
+
+    //region PRODUCT and CART
 
     public void setupProductPhoto(Context context, String imageName, ImageView imageView){
         StorageReference itemPhotoRef = FirebaseProvider.getCurrentProvider().getProductStorageReference()
@@ -93,4 +116,36 @@ public class FirebaseProviderHelper {
             }
         });
     }
+
+    //endregion
+
+    //region address
+
+    public void addNewAddressList(Address newAddress) {
+
+        DatabaseReference addressListDBRef = FirebaseProvider.getCurrentProvider().getAddressDBReference()
+                .child(Address.CHILD_ADDRESS_LIST);
+
+        String newKey = addressListDBRef.push().getKey();
+        addressListDBRef.child(newKey).setValue(newAddress);
+    }
+
+    public void deleteAddressFromList(Address address) {
+
+        FirebaseProvider.getCurrentProvider().getAddressDBReference()
+                .child(Address.CHILD_ADDRESS_LIST).child(address.getFirebaseKey()).getRef()
+                .removeValue()
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "deleteAddressFromList: Delete address : " + address.getFirebaseKey()))
+                .addOnFailureListener(aVoid -> Log.w(TAG, "deleteAddressFromList: Delete fail" + address.getFirebaseKey()));
+    }
+
+    public void updateSelectedAddress(String addressKey) {
+
+        FirebaseProvider.getCurrentProvider().getAddressDBReference()
+                .child(Address.CHILD_SELECTED_ADDRESS).setValue(addressKey)
+                .addOnSuccessListener(aVoid -> Log.d(TAG, "addSelectedAddress: Success update selected address : " + addressKey))
+                .addOnFailureListener(aVoid -> Log.w(TAG, "addSelectedAddress: Fail update selected address" + addressKey));
+    }
+
+    //endregion
 }

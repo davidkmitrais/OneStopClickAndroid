@@ -9,10 +9,17 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
+import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.Helper.CustomItemClickListener;
+import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.Helper.OnGetDataListener;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
 
 import java.util.List;
 
@@ -25,6 +32,7 @@ public class SelectAddressViewAdapter extends RecyclerView.Adapter<SelectAddress
     private Context context;
     private List<Address> addressList;
     CustomItemClickListener listener;
+    private FirebaseProviderHelper firebaseHelper = new FirebaseProviderHelper();
 
     public SelectAddressViewAdapter(Context context, List<Address> addressList, CustomItemClickListener listener){
         this.context = context;
@@ -46,17 +54,35 @@ public class SelectAddressViewAdapter extends RecyclerView.Adapter<SelectAddress
     @Override
     public void onBindViewHolder(SelectAddressViewHolder holder, int position) {
         Address address = addressList.get(position);
-        Address selectedAddress = CenterRepository.getCenterRepository().getSelectedAddress();
-        boolean isSelected = selectedAddress != null && address.getAddressName() == selectedAddress.getAddressName();
-        holder.configureWith(address, isSelected);
+        Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();//CenterRepository.getCenterRepository().getSelectedAddress();
 
-        holder.removeButton.setOnClickListener(new View.OnClickListener() {
+        DatabaseReference selectedAdrressDBRef = FirebaseProvider.getCurrentProvider().getAddressDBReference().child(Address.CHILD_SELECTED_ADDRESS);
+        firebaseHelper.getDataSnapshotOnceFromDBRef(selectedAdrressDBRef, new OnGetDataListener() {
             @Override
-            public void onClick(View v) {
-                addressList.remove(position);
-                notifyItemRemoved(position);
-                notifyItemChanged(position, addressList.size());
+            public void onStart() {
+
             }
+
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                String addressKey = data.getValue(String.class);
+                boolean isSelected = address.getFirebaseKey().equals(addressKey);
+                holder.configureWith(address, isSelected);
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+
+            }
+        });
+
+        holder.removeButton.setOnClickListener(v -> {
+            Address deleteAddress = addressList.get(position);
+            addressList.remove(position);
+            notifyItemRemoved(position);
+            notifyItemChanged(position, addressList.size());
+
+            firebaseHelper.deleteAddressFromList(deleteAddress);
         });
     }
 
