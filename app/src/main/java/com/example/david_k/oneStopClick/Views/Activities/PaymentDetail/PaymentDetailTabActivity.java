@@ -17,17 +17,27 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
+import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.Helper.OnGetDataListener;
 import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
+import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.ConfirmationPaymentFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.PaymentMethodFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail.SelectAddressFragment;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.Query;
 
 public class PaymentDetailTabActivity extends AppCompatActivity {
 
     private SectionsPagerAdapter mSectionsPagerAdapter;
+    FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
     private ViewPager mViewPager;
     Button confBackToAdressButton;
@@ -53,6 +63,11 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
         tabLayout.setupWithViewPager(mViewPager);
 
         mViewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            TextView addressDeliveryText;
+            TextView addressCityText;
+            TextView addressStateText;
+
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -67,47 +82,86 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
                 }
             }
 
-            private void setupSelectedAddressTexts() {
-                Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();
-
+            private void setupConfirmationFragmentView(){
                 FragmentManager fragmentManager = getSupportFragmentManager();
                 ConfirmationPaymentFragment confirmationFragment = (ConfirmationPaymentFragment) fragmentManager.findFragmentById(R.id.confirmation_payment_fragment);
                 View confirmationFragView = confirmationFragment.getView();
 
-                TextView addressDeliveryText = (TextView)confirmationFragView.findViewById(R.id.address_detail_delivery_confirmation);
-                TextView addressCityText = (TextView)confirmationFragView.findViewById(R.id.address_detail_city_confirmation);
-                TextView addressStateText = (TextView)confirmationFragView.findViewById(R.id.address_detail_state_confirmation);
+                addressDeliveryText = (TextView)confirmationFragView.findViewById(R.id.address_detail_delivery_confirmation);
+                addressCityText = (TextView)confirmationFragView.findViewById(R.id.address_detail_city_confirmation);
+                addressStateText = (TextView)confirmationFragView.findViewById(R.id.address_detail_state_confirmation);
                 confBackToAdressButton = (Button)confirmationFragView.findViewById(R.id.back_to_select_address_conf_button);
                 confContinueToPaymentButton = (Button)confirmationFragView.findViewById(R.id.continue_to_payment_conf_button);
 
-                confBackToAdressButton.setOnClickListener(new View.OnClickListener() {
+                confBackToAdressButton.setOnClickListener(v ->
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1));
+
+                confContinueToPaymentButton.setOnClickListener(v ->
+                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1));
+            }
+
+            private void setupSelectedAddressTexts() {
+
+                DatabaseReference addressDbRef = FirebaseProvider.getCurrentProvider().getAddressDBReference()
+                        .child(Address.CHILD_SELECTED_ADDRESS);
+
+                firebaseProviderHelper.getDataSnapshotOnceFromDBRef(addressDbRef, new OnGetDataListener() {
                     @Override
-                    public void onClick(View v) {
-                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() - 1);
+                    public void onStart() {
+
+                    }
+
+                    @Override
+                    public void onSuccess(DataSnapshot data) {
+                        String addressKey = data.getValue(String.class);
+
+                        setupConfirmationFragmentView();
+
+                        if (addressKey.equals(Constants.notSetKey)){
+                            addressDeliveryText.setText("Please select an address before continue to payment.");
+                            addressCityText.setText("");
+                            addressStateText.setText("");
+                            confContinueToPaymentButton.setVisibility(View.INVISIBLE);
+                            confBackToAdressButton.setVisibility(View.VISIBLE);
+                        }
+                        else {
+                            Query selectedAddressQuery = FirebaseProvider.getCurrentProvider().getAddressDBReference()
+                                    .child(Address.CHILD_ADDRESS_LIST).orderByKey().equalTo(addressKey);
+
+                            firebaseProviderHelper.getDataSnapshotOnceFromQuery(selectedAddressQuery, new OnGetDataListener() {
+                                @Override
+                                public void onStart() {
+
+                                }
+
+                                @Override
+                                public void onSuccess(DataSnapshot data) {
+
+                                    for (DataSnapshot dataItem: data.getChildren()) {
+                                        Address selectedAddress;
+                                        selectedAddress = dataItem.getValue(Address.class);
+
+                                        addressDeliveryText.setText(selectedAddress.getDeliveryAddress());
+                                        addressCityText.setText(selectedAddress.getCity());
+                                        addressStateText.setText(selectedAddress.getState());
+                                        confBackToAdressButton.setVisibility(View.INVISIBLE);
+                                        confContinueToPaymentButton.setVisibility(View.VISIBLE);
+                                    }
+                                }
+
+                                @Override
+                                public void onFailed(DatabaseError databaseError) {
+
+                                }
+                            });
+                        }
+                    }
+
+                    @Override
+                    public void onFailed(DatabaseError databaseError) {
+
                     }
                 });
-
-                confContinueToPaymentButton.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        mViewPager.setCurrentItem(mViewPager.getCurrentItem() + 1);
-                    }
-                });
-
-                if (selectedAddress != null) {
-                    addressDeliveryText.setText(selectedAddress.getDeliveryAddress());
-                    addressCityText.setText(selectedAddress.getCity());
-                    addressStateText.setText(selectedAddress.getState());
-                    confBackToAdressButton.setVisibility(View.INVISIBLE);
-                    confContinueToPaymentButton.setVisibility(View.VISIBLE);
-                }
-                else {
-                    addressDeliveryText.setText("Please select an address before continue to payment.");
-                    addressCityText.setText("");
-                    addressStateText.setText("");
-                    confContinueToPaymentButton.setVisibility(View.INVISIBLE);
-                    confBackToAdressButton.setVisibility(View.VISIBLE);
-                }
             }
 
             @Override
@@ -141,50 +195,6 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
     }
 
     /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_payment_tab, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-
-            Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();;
-            String addressName;
-            if (selectedAddress == null) {
-                addressName = "NOT SET";
-            } else {
-                addressName = selectedAddress.getAddressName();
-            }
-            Log.d("PayDetailTabActivity", "Selected Address is " + addressName);
-            return rootView;
-        }
-    }
-
-    /**
      * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
      * one of the sections/tabs/pages.
      */
@@ -209,10 +219,7 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
                     return new PaymentMethodFragment();
 
                 default:
-                    // getItem is called to instantiate the fragment for the given page.
-                    // Return a PlaceholderFragment (defined as a static inner class below).
-
-                    return PlaceholderFragment.newInstance(position + 1);
+                    return new SelectAddressFragment();
             }
         }
 

@@ -1,20 +1,15 @@
 package com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail;
 
 import android.content.Context;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
-import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
 import com.example.david_k.oneStopClick.Helper.CustomItemClickListener;
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
 import com.example.david_k.oneStopClick.Helper.OnGetDataListener;
-import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.R;
 import com.google.firebase.database.DataSnapshot;
@@ -54,7 +49,6 @@ public class SelectAddressViewAdapter extends RecyclerView.Adapter<SelectAddress
     @Override
     public void onBindViewHolder(SelectAddressViewHolder holder, int position) {
         Address address = addressList.get(position);
-        Address selectedAddress = new CenterRepositoryHelper().setDummySelecetedAddress();//CenterRepository.getCenterRepository().getSelectedAddress();
 
         DatabaseReference selectedAdrressDBRef = FirebaseProvider.getCurrentProvider().getAddressDBReference().child(Address.CHILD_SELECTED_ADDRESS);
         firebaseHelper.getDataSnapshotOnceFromDBRef(selectedAdrressDBRef, new OnGetDataListener() {

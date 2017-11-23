@@ -1,5 +1,6 @@
 package com.example.david_k.oneStopClick.Views.Fragments.PaymentDetail;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
@@ -15,21 +16,21 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
-import com.example.david_k.oneStopClick.Helper.CenterRepositoryHelper;
+import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
-import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
+import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress.PaymentAddAddressActivity;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressLint("ValidFragment")
 public class SelectAddressFragment extends Fragment {
 
     private FloatingActionButton addNewAdress;
@@ -47,7 +48,10 @@ public class SelectAddressFragment extends Fragment {
 
         addNewAdress = (FloatingActionButton) rootView.findViewById(R.id.add_new_address_button);
         addNewAdress.setOnClickListener(v -> {
+            ProductCart productCart = getActivity().getIntent().getExtras().getParcelable(Constants.productCartKey);
+
             Intent intent = new Intent(getActivity(), PaymentAddAddressActivity.class);
+            intent.putExtra(Constants.productCartKey, productCart);
 
             startActivity(intent);
         });
@@ -61,14 +65,6 @@ public class SelectAddressFragment extends Fragment {
 
         setupRecyclerView(rootView);
 
-//        recyclerView = (RecyclerView) rootView.findViewById(R.id.address_list_recycler_view);
-//        List<Address> addresses = new CenterRepositoryHelper().setDummySelecetedAddressList(); //CenterRepository.getCenterRepository().getListOfAddress();
-//        adapter = new SelectAddressViewAdapter(getActivity(), addresses, (v, position) -> rowTapped(v, recyclerView, position));
-//
-//        RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(getActivity());
-//        recyclerView.setLayoutManager(layoutManager);
-//        recyclerView.setAdapter(adapter);
-
         return rootView;
     }
 
@@ -81,27 +77,7 @@ public class SelectAddressFragment extends Fragment {
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(mLayoutManager);
 
-        addressListDBRef
-//                .addListenerForSingleValueEvent(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                getAllAddress(dataSnapshot);
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//
-//            private void getAllAddress(DataSnapshot dataSnapshot){
-//                Address address = dataSnapshot.getValue(Address.class);
-//                address.setFirebaseKey(dataSnapshot.getKey());
-//                addressList.add(address);
-//                adapter = new SelectAddressViewAdapter(getActivity(), addressList, (v, position) -> rowTapped(v, recyclerView, position));
-//                recyclerView.setAdapter(adapter);
-//            }
-//        });
-            .addChildEventListener(new ChildEventListener() {
+        addressListDBRef.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 getAllAddress(dataSnapshot);
@@ -114,7 +90,7 @@ public class SelectAddressFragment extends Fragment {
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                //productDeletion(dataSnapshot);
+
             }
 
             @Override
@@ -139,6 +115,8 @@ public class SelectAddressFragment extends Fragment {
 
     private void rowTapped(View view, RecyclerView recyclerView, int position) {
 
+        Address address = addressList.get(position);
+
         for (int i = 0; i < recyclerView.getChildCount(); i++){
             if (i == position) {
                 continue;
@@ -156,10 +134,8 @@ public class SelectAddressFragment extends Fragment {
         TextView selectedText = (TextView) view.findViewById(R.id.selected_address_text);
         boolean isSelectedTextDisplayed = selectedText.getVisibility() == View.VISIBLE;
 
-        Address address = addressList.get(position);
-
         if (isSelectedTextDisplayed) {
-            firebaseHelper.updateSelectedAddress("not set");
+            firebaseHelper.updateSelectedAddress(Constants.notSetKey);
             selectedText.setVisibility(View.INVISIBLE);
             Log.d("SelectAddressFragment", "Un-Select for : " + address.getAddressName());
         }

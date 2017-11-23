@@ -99,7 +99,7 @@ public class CartFragment extends Fragment {
     private void goToCartDetail(ProductCart productCart){
 
         Intent intent = new Intent(getActivity(), PaymentDetailTabActivity.class);
-        intent.putExtra(Constants.productKey, productCart);
+        intent.putExtra(Constants.productCartKey, productCart);
 
         startActivity(intent);
 

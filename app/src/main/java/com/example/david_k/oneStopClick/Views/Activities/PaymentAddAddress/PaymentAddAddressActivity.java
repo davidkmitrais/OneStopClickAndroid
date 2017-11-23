@@ -11,9 +11,11 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 
+import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
 import com.example.david_k.oneStopClick.Helper.Helper;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
+import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.PaymentDetail.PaymentDetailTabActivity;
 
@@ -26,6 +28,7 @@ public class PaymentAddAddressActivity extends AppCompatActivity {
     EditText deliveryText;
     EditText cityText;
     EditText stateText;
+    ProductCart productCartFromBundle;
     private ErrorSaveAddedAddressDialogFragment errorSaveDialogFragment;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
@@ -33,6 +36,8 @@ public class PaymentAddAddressActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_address);
+
+        productCartFromBundle = this.getIntent().getExtras().getParcelable(Constants.productCartKey);
 
         setupUI();
 
@@ -91,9 +96,9 @@ public class PaymentAddAddressActivity extends AppCompatActivity {
 
     private void goToSelectAddressListActivity() {
         Bundle bundle = new Bundle();
-//        bundle.putBoolean(Constants.mainActivityGoToCartFragmentBool, true);
 
         Intent intent = new Intent(this, PaymentDetailTabActivity.class);
+        intent.putExtra(Constants.productCartKey, productCartFromBundle);
         intent.putExtras(bundle);
 
         startActivity(intent);
