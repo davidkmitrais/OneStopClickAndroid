@@ -14,7 +14,6 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Helper.Helper;
-import com.example.david_k.oneStopClick.ModelLayers.CenterRepository;
 import com.example.david_k.oneStopClick.R;
 
 public class CreditCartPaymentActivity extends AppCompatActivity {
@@ -35,30 +34,17 @@ public class CreditCartPaymentActivity extends AppCompatActivity {
 
         setupUI();
 
-        ccConfirmButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (!validateAdressInputText()) {
-                    Log.d(TAG, "Validation error!", null);
+        ccConfirmButton.setOnClickListener(v -> {
+            if (!validateCCInputText()) {
+                Log.d(TAG, "Validation error!", null);
 
-                    errorSaveDialogFragment = new ErrorSaveCCPaymentDialogFragment();
-                    errorSaveDialogFragment.show(getSupportFragmentManager(), TAG);
-                }
-                else {
-//                    Address newAddress = new Address(
-//                            addressNameText.getText().toString(),
-//                            deliveryText.getText().toString(),
-//                            cityText.getText().toString(),
-//                            stateText.getText().toString()
-//                    );
-//
-//                    CenterRepository.getCenterRepository().addToAddressList(newAddress);
+                errorSaveDialogFragment = new ErrorSaveCCPaymentDialogFragment();
+                errorSaveDialogFragment.show(getSupportFragmentManager(), TAG);
+            }
+            else {
+                //Log.d(TAG, "Validation Success, new order " + CenterRepository.getCenterRepository().getSelectedProduct().getName() + " added into repo", null);
 
-                    //Log.d(TAG, "Validation Success, new order " + CenterRepository.getCenterRepository().getSelectedProduct().getName() + " added into repo", null);
-
-                    //Toast.makeText(v.getContext(), CenterRepository.getCenterRepository().getSelectedProduct().getName() + "added to order", Toast.LENGTH_SHORT).show();
-//                    goToSelectAddressListActivity();
-                }
+                Toast.makeText(v.getContext(), "added to order", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -73,7 +59,7 @@ public class CreditCartPaymentActivity extends AppCompatActivity {
         ccCVVText = (EditText) findViewById(R.id.cc_cvv_input);
     }
 
-    private boolean validateAdressInputText(){
+    private boolean validateCCInputText(){
         if (Helper.editTextIsEmptyOrNull(ccFullNameText)
                 || Helper.editTextIsEmptyOrNull(ccNumberText)
                 || Helper.editTextIsEmptyOrNull(ccExpDateText)
