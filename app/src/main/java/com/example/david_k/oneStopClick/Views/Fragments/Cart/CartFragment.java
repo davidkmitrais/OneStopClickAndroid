@@ -18,6 +18,8 @@ import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
 import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.PaymentDetail.PaymentDetailTabActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,12 +35,15 @@ public class CartFragment extends Fragment {
 
     List<ProductCart> productCartList;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
+    private FirebaseUser firebaseUser;
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         @SuppressLint("InflateParams")
         View view =  inflater.inflate(R.layout.cart_fragment, null);
+
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         setupRecyclerView(view);
 
@@ -47,7 +52,8 @@ public class CartFragment extends Fragment {
 
     private void setupRecyclerView(View view){
         productCartList = new ArrayList<>();
-        DatabaseReference productCartDatabaseReference = FirebaseProvider.getCurrentProvider().getProductCartDBReference();
+        DatabaseReference productCartDatabaseReference = FirebaseProvider.getCurrentProvider().getProductCartDBReference()
+                .child(firebaseUser.getUid());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.cardCell_item);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -91,7 +97,8 @@ public class CartFragment extends Fragment {
 
         ProductCart selectedProductCart = adapter.cartProducts.get(position);
 
-        firebaseProviderHelper.setOrderQtyForProductCart(false, selectedProductCart.getOrderQty(), selectedProductCart.getProductKey());
+        String userId = firebaseUser.getUid();
+        firebaseProviderHelper.setOrderQtyForProductCart(false, selectedProductCart.getOrderQty(), selectedProductCart.getProductKey(), userId);
 
         goToCartDetail(selectedProductCart);
     }

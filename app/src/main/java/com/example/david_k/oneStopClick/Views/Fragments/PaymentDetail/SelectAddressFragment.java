@@ -22,6 +22,8 @@ import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.PaymentAddAddress.PaymentAddAddressActivity;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -46,7 +48,7 @@ public class SelectAddressFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_payment_detail_select_address, container, false);
 
-        addNewAdress = (FloatingActionButton) rootView.findViewById(R.id.add_new_address_button);
+        addNewAdress = rootView.findViewById(R.id.add_new_address_button);
         addNewAdress.setOnClickListener(v -> {
             ProductCart productCart = getActivity().getIntent().getExtras().getParcelable(Constants.productCartKey);
 
@@ -71,7 +73,7 @@ public class SelectAddressFragment extends Fragment {
     private void setupRecyclerView(View view){
         addressList = new ArrayList<>();
         DatabaseReference addressListDBRef = FirebaseProvider.getCurrentProvider().getAddressDBReference()
-                .child(Address.CHILD_ADDRESS_LIST);
+                .child(Address.CHILD_ADDRESS_LIST).child(firebaseHelper.getUserId());
 
         recyclerView = (RecyclerView) view.findViewById(R.id.address_list_recycler_view);
         RecyclerView.LayoutManager mLayoutManager = new LinearLayoutManager(getActivity());
@@ -135,12 +137,12 @@ public class SelectAddressFragment extends Fragment {
         boolean isSelectedTextDisplayed = selectedText.getVisibility() == View.VISIBLE;
 
         if (isSelectedTextDisplayed) {
-            firebaseHelper.updateSelectedAddress(Constants.notSetKey);
+            firebaseHelper.updateSelectedAddress(Constants.notSetKey, firebaseHelper.getUserId());
             selectedText.setVisibility(View.INVISIBLE);
             Log.d("SelectAddressFragment", "Un-Select for : " + address.getAddressName());
         }
         else {
-            firebaseHelper.updateSelectedAddress(address.getFirebaseKey());
+            firebaseHelper.updateSelectedAddress(address.getFirebaseKey(), firebaseHelper.getUserId());
             selectedText.setVisibility(View.VISIBLE);
             Log.d("SelectAddressFragment", "Select for : " + address.getAddressName());
         }

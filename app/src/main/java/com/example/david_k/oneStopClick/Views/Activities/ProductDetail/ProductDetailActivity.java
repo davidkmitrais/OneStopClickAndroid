@@ -24,6 +24,8 @@ import com.example.david_k.oneStopClick.MainActivity;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.Query;
@@ -46,6 +48,7 @@ public class ProductDetailActivity extends AppCompatActivity {
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
     private boolean isNewCart;
+    private FirebaseUser firebaseUser;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -54,6 +57,7 @@ public class ProductDetailActivity extends AppCompatActivity {
 
         product = getIntent().getExtras().getParcelable(Constants.productKey);
         isNewCart = true;
+        firebaseUser = FirebaseAuth.getInstance().getCurrentUser();
 
         setupUI();
 
@@ -114,7 +118,8 @@ public class ProductDetailActivity extends AppCompatActivity {
                 Toast.makeText(v.getContext(), "added to cart", Toast.LENGTH_SHORT).show();
 
                 // Add / Update Cart Order
-                firebaseProviderHelper.setOrderQtyForProductCart(isNewCart, numItemOrdered, productFirebaseKey);
+                String userId = firebaseUser.getUid();
+                firebaseProviderHelper.setOrderQtyForProductCart(isNewCart, numItemOrdered, productFirebaseKey, userId);
 
                 cartAddedDialog = new CartAddedDialogFragment();
                 cartAddedDialog.show(getSupportFragmentManager(), "CartAddedDialogFragment");
@@ -174,7 +179,9 @@ public class ProductDetailActivity extends AppCompatActivity {
 
     public void setOrderQtyByProductKey(String productKey){
 
+        String userId = firebaseUser.getUid();
         Query query = FirebaseProvider.getCurrentProvider().getProductCartDBReference()
+                .child(userId)
                 .orderByChild(ProductCart.COLUMN_PRODUCT_KEY).equalTo(productKey);
 
         firebaseProviderHelper.getDataSnapshotOnceFromQuery(query, new OnGetDataListener() {

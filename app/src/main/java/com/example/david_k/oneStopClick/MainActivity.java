@@ -1,5 +1,6 @@
 package com.example.david_k.oneStopClick;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.NavigationView;
 import android.support.v4.app.Fragment;
@@ -11,20 +12,32 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.Views.Fragments.About.AboutFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.Admin.AdminFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.Cart.CartFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.ProductList.ProductListFragment;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    FirebaseAuth auth;
+    FirebaseUser user;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        auth = FirebaseAuth.getInstance();
+        user = auth.getCurrentUser();
 
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -38,7 +51,17 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
+        setUserInfo(navigationView.getHeaderView(0));
+
         setFragmentDisplay();
+    }
+
+    private void setUserInfo(View headerView) {
+        TextView line1 = (TextView) headerView.findViewById(R.id.user_info_text_line1);
+        line1.setText(user.getDisplayName());
+
+        TextView line2 = (TextView) headerView.findViewById(R.id.user_info_text_line2);
+        line2.setText(user.getEmail());
     }
 
     private void setFragmentDisplay() {
@@ -90,8 +113,15 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        switch (id) {
+            case R.id.action_settings:
+                return true;
+            case R.id.action_logout:
+                auth.signOut();
+                Intent loginIntent = new Intent(this,LoginActivity.class);
+                startActivity(loginIntent);
+
+                return true;
         }
 
         return super.onOptionsItemSelected(item);

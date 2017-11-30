@@ -50,7 +50,8 @@ public class SelectAddressViewAdapter extends RecyclerView.Adapter<SelectAddress
     public void onBindViewHolder(SelectAddressViewHolder holder, int position) {
         Address address = addressList.get(position);
 
-        DatabaseReference selectedAdrressDBRef = FirebaseProvider.getCurrentProvider().getAddressDBReference().child(Address.CHILD_SELECTED_ADDRESS);
+        DatabaseReference selectedAdrressDBRef = FirebaseProvider.getCurrentProvider().getAddressDBReference()
+                .child(Address.CHILD_SELECTED_ADDRESS).child(firebaseHelper.getUserId());
         firebaseHelper.getDataSnapshotOnceFromDBRef(selectedAdrressDBRef, new OnGetDataListener() {
             @Override
             public void onStart() {
@@ -76,7 +77,7 @@ public class SelectAddressViewAdapter extends RecyclerView.Adapter<SelectAddress
             notifyItemRemoved(position);
             notifyItemChanged(position, addressList.size());
 
-            firebaseHelper.deleteAddressFromList(deleteAddress);
+            firebaseHelper.deleteAddressFromList(deleteAddress, firebaseHelper.getUserId());
         });
     }
 

@@ -7,11 +7,14 @@
     <string name="action_settings">Settings</string>
     <string name="navHeader_Title">One Stop Click</string>
     <string name="navHeader_SubTitle">david.kristiawan@mitrais.com</string>
+    <string name="title_activity_payment_tab_detail">Payment</string>
 
     <string name="firebase_location" translatable="false">https://one-stop-click-davidk.firebaseio.com/</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="title_activity_payment_tab_detail">Payment</string>
-    <string name="section_format">Hello World from section: %1$d</string>
+    <string name="facebook_application_id" translatable="false">909464659230579</string>
+    <string name="facebook_login_protocol_scheme" translatable="false">fb909464659230579</string>
+
+    <string name="twitter_consumer_key" translatable="false">x0QsnfFlP12sz4l9xX8AkATgT</string>
+    <string name="twitter_consumer_secret" translatable="false">cH7CWTTuCUdmxbByXKqWPeywip4uKiOt0zZZ1dyQvnHTzcqHnq</string>
+
 </resources>

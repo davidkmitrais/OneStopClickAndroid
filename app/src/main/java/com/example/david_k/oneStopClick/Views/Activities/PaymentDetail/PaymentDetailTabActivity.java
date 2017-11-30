@@ -97,7 +97,7 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
             private void setupSelectedAddressTexts() {
 
                 DatabaseReference addressDbRef = FirebaseProvider.getCurrentProvider().getAddressDBReference()
-                        .child(Address.CHILD_SELECTED_ADDRESS);
+                        .child(Address.CHILD_SELECTED_ADDRESS).child(firebaseProviderHelper.getUserId());
 
                 firebaseProviderHelper.getDataSnapshotOnceFromDBRef(addressDbRef, new OnGetDataListener() {
                     @Override
@@ -111,7 +111,7 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
 
                         setupConfirmationFragmentView();
 
-                        if (addressKey.equals(Constants.notSetKey)){
+                        if (addressKey == null || addressKey.equals(Constants.notSetKey)){
                             addressDeliveryText.setText("Please select an address before continue to payment.");
                             addressCityText.setText("");
                             addressStateText.setText("");
@@ -120,7 +120,8 @@ public class PaymentDetailTabActivity extends AppCompatActivity {
                         }
                         else {
                             Query selectedAddressQuery = FirebaseProvider.getCurrentProvider().getAddressDBReference()
-                                    .child(Address.CHILD_ADDRESS_LIST).orderByKey().equalTo(addressKey);
+                                    .child(Address.CHILD_ADDRESS_LIST).child(firebaseProviderHelper.getUserId())
+                                    .orderByKey().equalTo(addressKey);
 
                             firebaseProviderHelper.getDataSnapshotOnceFromQuery(selectedAddressQuery, new OnGetDataListener() {
                                 @Override

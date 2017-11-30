@@ -18,6 +18,7 @@ import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.Views.Activities.PaymentDetail.PaymentDetailTabActivity;
+import com.google.firebase.auth.FirebaseAuth;
 
 public class PaymentAddAddressActivity extends AppCompatActivity {
 
@@ -57,7 +58,7 @@ public class PaymentAddAddressActivity extends AppCompatActivity {
                         stateText.getText().toString()
                 );
 
-                firebaseProviderHelper.addNewAddressList(newAddress);
+                firebaseProviderHelper.addNewAddressList(newAddress, firebaseProviderHelper.getUserId());
 
                 Log.d(TAG, "Validation Success, new address " + newAddress.getAddressName() + " added into repo", null);
 
