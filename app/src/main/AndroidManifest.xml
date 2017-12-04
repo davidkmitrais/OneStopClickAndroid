@@ -70,15 +70,20 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value=".Views.Activities.PaymentDetail.PaymentDetailTabActivity" />
         </activity>
-        <activity android:name=".LoginActivity">
+        <activity android:name=".Views.Activities.LoginAuthentication.LoginActivity">
             <meta-data
                 android:name="com.facebook.sdk.ApplicationId"
                 android:value="@string/facebook_application_id" />
+        </activity>
+        <activity
+            android:name=".Views.Activities.LoginAuthentication.AuthenticationActivity"
+            android:label="AuthenticationActivity"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 

@@ -1,10 +1,12 @@
-package com.example.david_k.oneStopClick;
+package com.example.david_k.oneStopClick.Views.Activities.LoginAuthentication;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 
+import com.example.david_k.oneStopClick.MainActivity;
+import com.example.david_k.oneStopClick.R;
 import com.firebase.ui.auth.AuthUI;
 import com.firebase.ui.auth.ErrorCodes;
 import com.firebase.ui.auth.IdpResponse;
@@ -79,5 +81,12 @@ public class LoginActivity extends AppCompatActivity {
                         .setAvailableProviders(providers)
                         .build(),
                 RC_SIGN_IN);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        Intent intent = new Intent(getApplicationContext(), AuthenticationActivity.class);
+        startActivity(intent);
     }
 }

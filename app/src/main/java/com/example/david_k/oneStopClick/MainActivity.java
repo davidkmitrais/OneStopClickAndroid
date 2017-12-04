@@ -16,14 +16,13 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.Helper.Constants;
+import com.example.david_k.oneStopClick.Views.Activities.LoginAuthentication.AuthenticationActivity;
 import com.example.david_k.oneStopClick.Views.Fragments.About.AboutFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.Admin.AdminFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.Cart.CartFragment;
 import com.example.david_k.oneStopClick.Views.Fragments.ProductList.ProductListFragment;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
-import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
@@ -58,10 +57,15 @@ public class MainActivity extends AppCompatActivity
 
     private void setUserInfo(View headerView) {
         TextView line1 = (TextView) headerView.findViewById(R.id.user_info_text_line1);
-        line1.setText(user.getDisplayName());
-
         TextView line2 = (TextView) headerView.findViewById(R.id.user_info_text_line2);
-        line2.setText(user.getEmail());
+
+        if (user != null && !user.isAnonymous()) {
+            line1.setText(user.getDisplayName());
+            line2.setText(user.getEmail());
+        } else {
+            line1.setText("Guest");
+            line2.setText("");
+        }
     }
 
     private void setFragmentDisplay() {
@@ -118,7 +122,7 @@ public class MainActivity extends AppCompatActivity
                 return true;
             case R.id.action_logout:
                 auth.signOut();
-                Intent loginIntent = new Intent(this,LoginActivity.class);
+                Intent loginIntent = new Intent(this, AuthenticationActivity.class);
                 startActivity(loginIntent);
 
                 return true;
