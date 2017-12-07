@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <android.support.v7.widget.CardView
+        android:id="@+id/card_view_category"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_gravity="center"
+        android:layout_margin="@dimen/product_card_margin"
+        android:elevation="3dp"
+        card_view:cardCornerRadius="@dimen/product_card_album_radius">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <ImageView
+                android:id="@+id/thumbnail_category_card"
+                android:layout_width="@dimen/category_card_icon_height"
+                android:layout_height="@dimen/category_card_icon_height"
+                android:background="?attr/selectableItemBackgroundBorderless"
+                android:scaleType="fitXY"/>
+
+            <TextView
+                android:id="@+id/title_category_card"
+                android:layout_width="@dimen/category_card_icon_height"
+                android:layout_height="@dimen/category_card_title_height"
+                android:layout_below="@id/thumbnail_category_card"
+                android:paddingLeft="@dimen/category_card_title_padding"
+                android:paddingRight="@dimen/category_card_title_padding"
+                android:paddingTop="@dimen/category_card_title_padding"
+                android:textColor="@color/category_card_title"
+                android:textSize="@dimen/category_card_title_size"
+                android:textAlignment="center"/>
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+</LinearLayout>

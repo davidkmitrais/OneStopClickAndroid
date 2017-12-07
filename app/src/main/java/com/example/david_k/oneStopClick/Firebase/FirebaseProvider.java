@@ -36,15 +36,20 @@ public class FirebaseProvider{
     private DatabaseReference productDBReference;
     private DatabaseReference productCartDBReference;
     private DatabaseReference addressCartDBReference;
+    private DatabaseReference categoryDBReference;
 
     private StorageReference productPhotoStorageRef;
+    private StorageReference categoryIconStorageRef;
 
     private ChildEventListener productChildEventListener = null;
 
     public static final String PRODUCT_TABLE = "products";
     public static final String PRODUCT_CART_TABLE = "product_carts";
     public static final String ADDRESS_TABLE = "address";
+    public static final String CATEGORY_TABLE = "categories";
+
     public static final String PRODUCT_PHOTO_STORAGE = "product_photos";
+    public static final String CATEGORY_PHOTO_STORAGE = "category_icons";
 
     public static FirebaseProvider getCurrentProvider() {
 
@@ -65,17 +70,22 @@ public class FirebaseProvider{
     public DatabaseReference getProductDBReference(){
         return this.productDBReference;
     }
-
     public DatabaseReference getProductCartDBReference(){
         return this.productCartDBReference;
     }
-
     public DatabaseReference getAddressDBReference(){
         return this.addressCartDBReference;
     }
+    public DatabaseReference getCategoryDBReference(){
+        return this.categoryDBReference;
+    }
+
 
     public StorageReference getProductStorageReference(){
         return this.productPhotoStorageRef;
+    }
+    public StorageReference getCategoryIconStorageRef(){
+        return this.categoryIconStorageRef;
     }
 
     private static void InitializeFirebaseComponent() {
@@ -90,8 +100,10 @@ public class FirebaseProvider{
         firebaseProvider.productDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_TABLE);
         firebaseProvider.productCartDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_CART_TABLE);
         firebaseProvider.addressCartDBReference = firebaseProvider.firebaseDatabase.getReference().child(ADDRESS_TABLE);
+        firebaseProvider.categoryDBReference = firebaseProvider.firebaseDatabase.getReference().child(CATEGORY_TABLE);
 
         // Initialize Storage References
         firebaseProvider.productPhotoStorageRef = firebaseProvider.firebaseStorage.getReference().child(PRODUCT_PHOTO_STORAGE);
+        firebaseProvider.categoryIconStorageRef = firebaseProvider.firebaseStorage.getReference().child(CATEGORY_PHOTO_STORAGE);
     }
 }

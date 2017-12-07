@@ -1,6 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#3F51B5</color>
-    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorPrimary">#FFF7E6</color>
+    <color name="colorPrimaryDark">#FFCC66</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="product_card_title">#4c4c4c</color>
+    <color name="category_card_title">#4c4c4c</color>
+
 </resources>

@@ -155,6 +155,19 @@ public class FirebaseProviderHelper {
 
     //endregion
 
+    //region Category
+
+    public void setupCategoryPhoto(Context context, String imageName, ImageView imageView){
+        StorageReference itemPhotoRef = FirebaseProvider.getCurrentProvider().getCategoryIconStorageRef()
+                .child(imageName + ".png");
+
+        GlideApp.with(context)
+                .load(itemPhotoRef)
+                .into(imageView);
+    }
+
+    //endregion
+
     // region Firebase User
 
     public String getUserId(){
