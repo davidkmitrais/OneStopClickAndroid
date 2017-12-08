@@ -10,6 +10,7 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
+import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.View.Adapter.ProductDetailCardAdapter;
@@ -30,6 +31,7 @@ public class PromotedProductFragment extends Fragment {
     RecyclerView recyclerView;
     private ProductDetailCardAdapter adapter;
     private List<Product> promotedProduct;
+    private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
     public PromotedProductFragment() {
         // Required empty public constructor
@@ -57,12 +59,12 @@ public class PromotedProductFragment extends Fragment {
         productDatabaseReference.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                setProductFromSnapshot(dataSnapshot);
+                addProductFromSnapshot(dataSnapshot);
             }
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                setProductFromSnapshot(dataSnapshot);
+                //addProductFromSnapshot(dataSnapshot);
             }
 
             @Override
@@ -82,7 +84,7 @@ public class PromotedProductFragment extends Fragment {
         });
     }
 
-    private void setProductFromSnapshot(DataSnapshot dataSnapshot){
+    private void addProductFromSnapshot(DataSnapshot dataSnapshot){
         Product product = dataSnapshot.getValue(Product.class);
         product.setFirebaseKey(dataSnapshot.getKey());
         promotedProduct.add(product);
@@ -91,6 +93,9 @@ public class PromotedProductFragment extends Fragment {
     }
 
     private void rowTapped(Product product) {
+
+        int incViewCount = product.getViewCount() + 1;
+        firebaseProviderHelper.setViewCountForProduct(incViewCount, product.getFirebaseKey());
 
         Toast.makeText(getActivity(), "Go to Product " + product.getName(), Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);

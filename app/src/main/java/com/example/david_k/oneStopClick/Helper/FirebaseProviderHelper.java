@@ -123,6 +123,14 @@ public class FirebaseProviderHelper {
         });
     }
 
+    public void setViewCountForProduct(int viewCount, String productFirebaseKey) {
+
+        DatabaseReference productRef = FirebaseProvider.getCurrentProvider().getProductDBReference();
+
+        productRef.child(productFirebaseKey).child(Product.COLUMN_VIEW_COUNT).setValue(viewCount);
+
+    }
+
     //endregion
 
     //region address

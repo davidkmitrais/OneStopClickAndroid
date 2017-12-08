@@ -38,14 +38,32 @@
                 android:textSize="@dimen/product_card_title" />
 
             <TextView
-                android:id="@+id/count_product_card"
+                android:id="@+id/price_product_card"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title_product_card"
+                android:paddingLeft="@dimen/product_card_title_padding"
+                android:paddingRight="@dimen/product_card_title_padding"
+                android:textSize="@dimen/product_card_price_textsize" />
+
+            <TextView
+                android:id="@+id/like_count_product_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/price_product_card"
+                android:paddingLeft="@dimen/product_card_title_padding"
+                android:paddingRight="@dimen/product_card_title_padding"
+                android:textSize="@dimen/product_card_count_textsize" />
+
+            <TextView
+                android:id="@+id/view_count_product_card"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/like_count_product_card"
                 android:paddingBottom="@dimen/product_card_count_padding_bottom"
                 android:paddingLeft="@dimen/product_card_title_padding"
                 android:paddingRight="@dimen/product_card_title_padding"
-                android:textSize="@dimen/product_card_count" />
+                android:textSize="@dimen/product_card_count_textsize" />
 
             <ImageView
                 android:id="@+id/overflow_product_card"
