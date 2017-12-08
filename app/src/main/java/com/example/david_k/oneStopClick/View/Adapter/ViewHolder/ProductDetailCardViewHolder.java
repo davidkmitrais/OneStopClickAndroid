@@ -26,7 +26,7 @@ public class ProductDetailCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     public void configureWith(Product product){
-        String price = String.valueOf(product.price);
+        String price = String.valueOf(product.price) + " USD";
 
         itemName.setText(product.name);
         itemPrice.setText(price);

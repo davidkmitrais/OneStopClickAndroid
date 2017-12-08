@@ -6,8 +6,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.david_k.oneStopClick.Helper.CustomItemClickListener;
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.Helper.Interface.CategoryItemClickListener;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Category;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.View.Adapter.ViewHolder.CategoryCardViewHolder;
@@ -19,10 +19,10 @@ public class CategoryCardAdapter extends RecyclerView.Adapter<CategoryCardViewHo
     public List<Category> categories;
 
     private Context context;
-    CustomItemClickListener listener;
+    CategoryItemClickListener listener;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
-    public CategoryCardAdapter(Context context, List<Category> categoryList, CustomItemClickListener listener) {
+    public CategoryCardAdapter(Context context, List<Category> categoryList, CategoryItemClickListener listener) {
         this.context = context;
         this.categories = categoryList;
         this.listener = listener;
@@ -35,14 +35,14 @@ public class CategoryCardAdapter extends RecyclerView.Adapter<CategoryCardViewHo
 
         final CategoryCardViewHolder holder = new CategoryCardViewHolder(categoryView);
 
-        categoryView.setOnClickListener(v -> listener.onItemClick(v, holder.getAdapterPosition()));
+        categoryView.setOnClickListener(v -> listener.onCategoryClick(v, getCategoryByPosition(holder.getAdapterPosition())));
 
         return holder;
     }
 
     @Override
     public void onBindViewHolder(CategoryCardViewHolder holder, int position) {
-        Category category = categories.get(position);
+        Category category = getCategoryByPosition(position);
         holder.configureWith(category);
 
         firebaseProviderHelper.setupCategoryPhoto(context, category.getImageName(), holder.itemPhoto);
@@ -51,5 +51,9 @@ public class CategoryCardAdapter extends RecyclerView.Adapter<CategoryCardViewHo
     @Override
     public int getItemCount() {
         return categories.size();
+    }
+
+    private Category getCategoryByPosition(int position){
+        return categories.get(position);
     }
 }

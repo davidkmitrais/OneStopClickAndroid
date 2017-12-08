@@ -11,8 +11,6 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
-import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
-import com.example.david_k.oneStopClick.Helper.OnGetDataListener;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Category;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.View.Adapter.CategoryCardAdapter;
@@ -20,7 +18,6 @@ import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +30,6 @@ public class CategoryFragment extends Fragment {
     RecyclerView recyclerView;
     private CategoryCardAdapter adapter;
     private List<Category> categoryList;
-    private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
     DatabaseReference categoryDBRef = FirebaseProvider.getCurrentProvider().getCategoryDBReference();
 
 
@@ -91,40 +87,13 @@ public class CategoryFragment extends Fragment {
         Category category = dataSnapshot.getValue(Category.class);
         category.setFirebaseKey(dataSnapshot.getKey());
         categoryList.add(category);
-        adapter = new CategoryCardAdapter(getActivity(), categoryList, (v, position) -> rowTapped(position));
+        adapter = new CategoryCardAdapter(getActivity(), categoryList, (v, item) -> rowTapped(item));
         recyclerView.setAdapter(adapter);
     }
 
-    private void rowTapped(int position) {
+    private void rowTapped(Category categoryItem) {
 
-        String key = adapter.categories.get(position).getFirebaseKey();
-
-        Query query = categoryDBRef.orderByKey().equalTo(key);
-        firebaseProviderHelper.getDataSnapshotOnceFromQuery(query, new OnGetDataListener() {
-            @Override
-            public void onStart() {
-
-            }
-
-            @Override
-            public void onSuccess(DataSnapshot data) {
-                for (DataSnapshot itemData : data.getChildren()) {
-                    Category category = itemData.getValue(Category.class);
-                    category.setFirebaseKey(itemData.getKey());
-                    goToCategoryDetail(category);
-                }
-            }
-
-            @Override
-            public void onFailed(DatabaseError databaseError) {
-
-            }
-        });
-    }
-
-    private void goToCategoryDetail(Category category){
-
-        Toast.makeText(getActivity(), "Go to Category " + category.getCategoryName(), Toast.LENGTH_SHORT).show();
+        Toast.makeText(getActivity(), "Go to Category " + categoryItem.getCategoryName(), Toast.LENGTH_SHORT).show();
 //        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
 //        intent.putExtra(Constants.productKey, product);
 //

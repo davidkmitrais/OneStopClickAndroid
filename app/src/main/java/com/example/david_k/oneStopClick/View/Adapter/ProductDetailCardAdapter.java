@@ -10,8 +10,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.example.david_k.oneStopClick.Helper.CustomItemClickListener;
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.Helper.Interface.ProductItemClickListener;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.View.Adapter.ViewHolder.ProductDetailCardViewHolder;
@@ -23,10 +23,10 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
     public List<Product> products;
 
     private Context context;
-    CustomItemClickListener listener;
+    ProductItemClickListener listener;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
 
-    public ProductDetailCardAdapter(Context context, List<Product> productList, CustomItemClickListener listener) {
+    public ProductDetailCardAdapter(Context context, List<Product> productList, ProductItemClickListener listener) {
         this.context = context;
         this.products = productList;
         this.listener = listener;
@@ -39,14 +39,14 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
 
         final ProductDetailCardViewHolder holder = new ProductDetailCardViewHolder(productView);
 
-        productView.setOnClickListener(v -> listener.onItemClick(v, holder.getAdapterPosition()));
+        productView.setOnClickListener(v -> listener.onProductClick(v, getProductByPosition(holder.getAdapterPosition())));
 
         return holder;
     }
 
     @Override
     public void onBindViewHolder(ProductDetailCardViewHolder holder, int position) {
-        Product product = products.get(position);
+        Product product = getProductByPosition(position);
         holder.configureWith(product);
 
         firebaseProviderHelper.setupProductPhoto(context, product.getImageName(), holder.itemPhoto);
@@ -63,6 +63,10 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
         inflater.inflate(R.menu.menu_payment_tab_detail, popup.getMenu());
         popup.setOnMenuItemClickListener(new MyMenuItemClickListener());
         popup.show();
+    }
+
+    private Product getProductByPosition(int position){
+        return products.get(position);
     }
 
     class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {
