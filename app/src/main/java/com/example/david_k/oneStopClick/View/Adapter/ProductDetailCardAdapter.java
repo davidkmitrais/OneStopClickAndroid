@@ -8,6 +8,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
@@ -16,9 +18,10 @@ import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.View.Adapter.ViewHolder.ProductDetailCardViewHolder;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetailCardViewHolder> {
+public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetailCardViewHolder> implements Filterable {
 
     public List<Product> products;
 
@@ -67,6 +70,41 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
 
     private Product getProductByPosition(int position){
         return products.get(position);
+    }
+
+    @Override
+    public Filter getFilter() {
+        return new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                String charString = constraint.toString();
+
+                if (!charString.isEmpty()) {
+
+                    ArrayList<Product> filteredList = new ArrayList<>();
+
+                    for (Product androidVersion : products) {
+
+                        if (androidVersion.getName().toLowerCase().contains(charString)) {
+
+                            filteredList.add(androidVersion);
+                        }
+                    }
+
+                    products = filteredList;
+                }
+
+                FilterResults filterResults = new FilterResults();
+                filterResults.values = products;
+                return filterResults;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                products = (ArrayList<Product>) results.values;
+                notifyDataSetChanged();
+            }
+        };
     }
 
     class MyMenuItemClickListener implements PopupMenu.OnMenuItemClickListener {

@@ -9,9 +9,11 @@ import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Address;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.ModelLayers.Database.ProductCart;
+import com.example.david_k.oneStopClick.ModelLayers.Database.ProductLike;
 import com.firebase.ui.storage.images.FirebaseImageLoader;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -131,6 +133,61 @@ public class FirebaseProviderHelper {
 
     }
 
+    public void setLikeCountForProduct(int likeCount, String productFirebaseKey) {
+
+        DatabaseReference productRef = FirebaseProvider.getCurrentProvider().getProductDBReference();
+
+        productRef.child(productFirebaseKey).child(Product.COLUMN_LIKE_COUNT).setValue(likeCount);
+
+    }
+
+    public void setIsLikedForProductLike(Boolean isLiked, String productFirebaseKey, String userId) {
+
+        DatabaseReference productLikeRef = FirebaseProvider.getCurrentProvider().getProductLikeDBReference();
+
+        if (isLiked) {
+            // Add new Product Like
+            addNewIsLikedForProductLike(productLikeRef, isLiked, productFirebaseKey, userId);
+        } else {
+            // Delete Product Like
+            deleteIsLikedForProductLike(productLikeRef, isLiked, productFirebaseKey, userId);
+        }
+    }
+
+    private void addNewIsLikedForProductLike(DatabaseReference productLikeRef, Boolean isLiked, String productFirebaseKey, String userId) {
+        ProductLike newProductLike = new ProductLike(productFirebaseKey, isLiked, userId);
+
+        String newKey = productLikeRef.child(userId).push().getKey();
+
+        productLikeRef.child(userId).child(newKey).setValue(newProductLike);
+    }
+
+    private void deleteIsLikedForProductLike(DatabaseReference productLikeRef, Boolean isLiked, String productFirebaseKey, String userId) {
+
+        Query query = productLikeRef.child(userId).orderByChild(ProductLike.COLUMN_PRODUCT_KEY).equalTo(productFirebaseKey);
+
+        getDataSnapshotOnceFromQuery(query, new OnGetDataListener() {
+            @Override
+            public void onStart() {
+
+            }
+
+            @Override
+            public void onSuccess(DataSnapshot data) {
+                for (DataSnapshot itemData : data.getChildren()) {
+                    itemData.getRef().removeValue()
+                            .addOnSuccessListener(aVoid -> Log.d(TAG, "deleteIsLikedForProductLike: Delete Product Like : " + productFirebaseKey))
+                            .addOnFailureListener(aVoid -> Log.w(TAG, "deleteIsLikedForProductLike: Delete fail" + productFirebaseKey));
+                }
+            }
+
+            @Override
+            public void onFailed(DatabaseError databaseError) {
+
+            }
+        });
+    }
+
     //endregion
 
     //region address
@@ -179,7 +236,16 @@ public class FirebaseProviderHelper {
     // region Firebase User
 
     public String getUserId(){
-        return FirebaseAuth.getInstance().getCurrentUser().getUid();
+        String result;
+        FirebaseAuth mAuth = FirebaseProvider.getCurrentProvider().getFirebaseAuth();
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (!user.isAnonymous()) {
+            result = user.getUid();
+        } else {
+            result = "AnonymousUser";
+        }
+
+        return result;
     }
 
     //endregion

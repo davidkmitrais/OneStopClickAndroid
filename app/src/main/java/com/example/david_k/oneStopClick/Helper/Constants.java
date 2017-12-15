@@ -8,6 +8,7 @@ public final class Constants {
     public static final String productKey = "product";
     public static final String productCartKey = "productCart";
     public static final String mainActivityGoToCartFragmentBool = "mainActivityGoToCartFragment";
+    public static final String childPageActivityKey = "childPageActivity";
 
     public static final String selectedAddressKey = "selectedAddress";
 }

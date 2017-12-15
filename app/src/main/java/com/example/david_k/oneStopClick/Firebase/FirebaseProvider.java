@@ -37,6 +37,7 @@ public class FirebaseProvider{
     private DatabaseReference productCartDBReference;
     private DatabaseReference addressCartDBReference;
     private DatabaseReference categoryDBReference;
+    private DatabaseReference productLikeDBReference;
 
     private StorageReference productPhotoStorageRef;
     private StorageReference categoryIconStorageRef;
@@ -47,6 +48,7 @@ public class FirebaseProvider{
     public static final String PRODUCT_CART_TABLE = "product_carts";
     public static final String ADDRESS_TABLE = "address";
     public static final String CATEGORY_TABLE = "categories";
+    public static final String PRODUCT_LIKE_TABLE = "product_likes";
 
     public static final String PRODUCT_PHOTO_STORAGE = "product_photos";
     public static final String CATEGORY_PHOTO_STORAGE = "category_icons";
@@ -79,6 +81,9 @@ public class FirebaseProvider{
     public DatabaseReference getCategoryDBReference(){
         return this.categoryDBReference;
     }
+    public DatabaseReference getProductLikeDBReference(){
+        return this.productLikeDBReference;
+    }
 
 
     public StorageReference getProductStorageReference(){
@@ -88,6 +93,8 @@ public class FirebaseProvider{
         return this.categoryIconStorageRef;
     }
 
+    public FirebaseAuth getFirebaseAuth() { return this.firebaseAuth; }
+
     private static void InitializeFirebaseComponent() {
 
         Log.d(TAG, "getCurrentProvider: Create FirebaseProvider class.");
@@ -95,12 +102,14 @@ public class FirebaseProvider{
         // Initialize Firebase
         firebaseProvider.firebaseDatabase = FirebaseDatabase.getInstance();
         firebaseProvider.firebaseStorage = FirebaseStorage.getInstance();
+        firebaseProvider.firebaseAuth = FirebaseAuth.getInstance();
 
         // Initialize Database References
         firebaseProvider.productDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_TABLE);
         firebaseProvider.productCartDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_CART_TABLE);
         firebaseProvider.addressCartDBReference = firebaseProvider.firebaseDatabase.getReference().child(ADDRESS_TABLE);
         firebaseProvider.categoryDBReference = firebaseProvider.firebaseDatabase.getReference().child(CATEGORY_TABLE);
+        firebaseProvider.productLikeDBReference = firebaseProvider.firebaseDatabase.getReference().child(PRODUCT_LIKE_TABLE);
 
         // Initialize Storage References
         firebaseProvider.productPhotoStorageRef = firebaseProvider.firebaseStorage.getReference().child(PRODUCT_PHOTO_STORAGE);

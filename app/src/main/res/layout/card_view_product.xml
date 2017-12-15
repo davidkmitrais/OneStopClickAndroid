@@ -42,6 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/title_product_card"
+                android:textColor="@color/product_card_price_color"
                 android:paddingLeft="@dimen/product_card_title_padding"
                 android:paddingRight="@dimen/product_card_title_padding"
                 android:textSize="@dimen/product_card_price_textsize" />

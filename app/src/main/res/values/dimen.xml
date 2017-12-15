@@ -26,4 +26,10 @@
     <dimen name="category_card_title_padding">10dp</dimen>
     <dimen name="category_card_title_size">12sp</dimen>
     <dimen name="category_card_title_height">30dp</dimen>
+
+    <!--Product Detail Dimens-->
+    <dimen name="product_detail_text_size">16sp</dimen>
+    <dimen name="product_detail_margin_start">5dp</dimen>
+    <dimen name="product_detail_text_size_little">12sp</dimen>
+    <dimen name="product_detail_text_size_Large">18sp</dimen>
 </resources>

@@ -81,20 +81,28 @@
             android:name=".Views.Activities.LoginAuthentication.AuthenticationActivity"
             android:label="AuthenticationActivity"
             android:theme="@style/AppTheme.NoActionBar">
-            <!--<intent-filter>-->
-                <!--<action android:name="android.intent.action.MAIN" />-->
 
-                <!--<category android:name="android.intent.category.LAUNCHER" />-->
-            <!--</intent-filter>-->
+            <!-- <intent-filter> -->
+            <!-- <action android:name="android.intent.action.MAIN" /> -->
+
+
+            <!-- <category android:name="android.intent.category.LAUNCHER" /> -->
+            <!-- </intent-filter> -->
         </activity>
-        <activity android:name=".View.Activity.ParentActivity"
+        <activity
+            android:name=".View.Activity.ParentActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".View.Activity.ChildActivity"
+            android:theme="@style/AppTheme"
+            android:parentActivityName=".View.Activity.ParentActivity">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.Activity.ParentActivity" /></activity>
     </application>
 
 </manifest>

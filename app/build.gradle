@@ -57,6 +57,8 @@ dependencies {
     // Social Media login support
     compile 'com.facebook.android:facebook-login:4.27.0'
     compile("com.twitter.sdk.android:twitter-core:3.0.0@aar") { transitive = true }
+
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
 }
 
 // apply Firebase SDK
