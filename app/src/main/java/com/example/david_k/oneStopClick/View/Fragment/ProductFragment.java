@@ -3,18 +3,15 @@ package com.example.david_k.oneStopClick.View.Fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.MenuItemCompat;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.Helper.Constants;
@@ -48,30 +45,14 @@ public class ProductFragment extends Fragment {
     }
 
     @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        setHasOptionsMenu(true);
-    }
-
-    @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.search_menu_product, menu);
-
-        MenuItem search = menu.findItem(R.id.search_product);
-        SearchView searchView = (SearchView) MenuItemCompat.getActionView(search);
-        search(searchView);
-
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
         setupRecyclerView(view);
+
+        setupSearch(view);
 
         return view;
     }
@@ -132,22 +113,22 @@ public class ProductFragment extends Fragment {
         startActivity(intent);
     }
 
-    private void search(SearchView searchView) {
-        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+    private void setupSearch(View view) {
+        EditText searchText = view.findViewById(R.id.product_list_search_text);
+
+        searchText.addTextChangedListener(new TextWatcher() {
             @Override
-            public boolean onQueryTextSubmit(String query) {
-                return false;
-            }
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) { }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
                 if (adapter != null) {
-                    adapter.getFilter().filter(newText);
+                    adapter.getFilter().filter(editable.toString());
                 }
-
-                return true;
             }
-
         });
     }
 

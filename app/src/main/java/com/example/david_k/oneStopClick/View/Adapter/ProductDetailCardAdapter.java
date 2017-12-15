@@ -24,6 +24,7 @@ import java.util.List;
 public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetailCardViewHolder> implements Filterable {
 
     public List<Product> products;
+    public List<Product> filteredProducts;
 
     private Context context;
     ProductItemClickListener listener;
@@ -32,6 +33,7 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
     public ProductDetailCardAdapter(Context context, List<Product> productList, ProductItemClickListener listener) {
         this.context = context;
         this.products = productList;
+        this.filteredProducts = productList;
         this.listener = listener;
     }
 
@@ -59,6 +61,11 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
         );
     }
 
+    @Override
+    public int getItemCount() {
+        return filteredProducts.size();
+    }
+
     private void showPopupMenu(View view) {
         // inflate menu
         PopupMenu popup = new PopupMenu(context, view);
@@ -69,7 +76,7 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
     }
 
     private Product getProductByPosition(int position){
-        return products.get(position);
+        return filteredProducts.get(position);
     }
 
     @Override
@@ -79,7 +86,10 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
             protected FilterResults performFiltering(CharSequence constraint) {
                 String charString = constraint.toString();
 
-                if (!charString.isEmpty()) {
+                if (charString.isEmpty()) {
+                    filteredProducts = products;
+                }
+                else {
 
                     ArrayList<Product> filteredList = new ArrayList<>();
 
@@ -91,17 +101,17 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
                         }
                     }
 
-                    products = filteredList;
+                    filteredProducts = filteredList;
                 }
 
                 FilterResults filterResults = new FilterResults();
-                filterResults.values = products;
+                filterResults.values = filteredProducts;
                 return filterResults;
             }
 
             @Override
             protected void publishResults(CharSequence constraint, FilterResults results) {
-                products = (ArrayList<Product>) results.values;
+                filteredProducts = (ArrayList<Product>) results.values;
                 notifyDataSetChanged();
             }
         };
@@ -122,10 +132,5 @@ public class ProductDetailCardAdapter extends RecyclerView.Adapter<ProductDetail
             }
             return false;
         }
-    }
-
-    @Override
-    public int getItemCount() {
-        return products.size();
     }
 }
