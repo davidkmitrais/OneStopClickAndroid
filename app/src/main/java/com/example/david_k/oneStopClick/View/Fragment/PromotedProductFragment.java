@@ -13,6 +13,7 @@ import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
+import com.example.david_k.oneStopClick.ModelLayers.Enums.ChildActivityPages;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.View.Activity.ChildActivity;
 import com.example.david_k.oneStopClick.View.Adapter.ProductDetailCardAdapter;
@@ -106,7 +107,7 @@ public class PromotedProductFragment extends Fragment {
 //        Toast.makeText(getActivity(), "Go to Product " + product.getName(), Toast.LENGTH_SHORT).show();
         Intent intent = new Intent(getActivity(), ChildActivity.class);
         intent.putExtra(Constants.productKey, product);
-        intent.putExtra(Constants.childPageActivityKey, "ProductDetail");
+        intent.putExtra(Constants.childPageActivityKey, Constants.ChildActivityPagesEnum.PRODUCT_DETAIL);
 
         startActivity(intent);
     }

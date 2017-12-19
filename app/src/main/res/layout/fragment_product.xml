@@ -10,19 +10,30 @@
         <!--android:layout_width="match_parent"-->
         <!--android:layout_height="match_parent">-->
 
-    <EditText
-        android:id="@+id/product_list_search_text"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:hint="Enter search term"
-        tools:layout_constraintTop_creator="1"
-        tools:layout_constraintRight_creator="1"
-        android:layout_marginStart="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginTop="8dp"
-        tools:layout_constraintLeft_creator="1"
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="8dp" />
+        <!--Bottom Blank Space-->
+        <TextView
+            android:id="@+id/prodcut_list_title"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="All Product"
+            android:gravity="center"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="5dp"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/product_list_search_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Enter search term"
+            tools:layout_constraintTop_creator="1"
+            tools:layout_constraintRight_creator="1"
+            android:layout_marginStart="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            tools:layout_constraintLeft_creator="1"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp" />
 
         <android.support.v7.widget.RecyclerView
             android:id="@+id/product_list_rv"
@@ -36,14 +47,6 @@
             android:layout_height="70dp"
             android:text=""
             android:textStyle="bold"/>
-
-    <!--Bottom Blank Space-->
-    <TextView
-        android:id="@+id/blank_space_bottom2"
-        android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:text=""
-        android:textStyle="bold"/>
 
     <!--</ScrollView>-->
 

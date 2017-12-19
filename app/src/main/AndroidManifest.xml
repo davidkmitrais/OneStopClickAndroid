@@ -94,15 +94,25 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".View.Activity.ChildActivity"
-            android:theme="@style/AppTheme"
-            android:parentActivityName=".View.Activity.ParentActivity">
+        <activity
+            android:name=".View.Activity.ChildActivity"
+            android:parentActivityName=".View.Activity.ParentActivity"
+            android:theme="@style/AppTheme">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value=".View.Activity.ParentActivity" /></activity>
+                android:value=".View.Activity.ParentActivity" />
+        </activity>
+        <activity android:name=".View.Activity.GrandChildActivity"
+            android:parentActivityName=".View.Activity.ChildActivity"
+            android:theme="@style/AppTheme">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value=".View.Activity.ChildActivity" />
+        </activity>
     </application>
 
 </manifest>

@@ -1,6 +1,7 @@
 package com.example.david_k.oneStopClick.View.Fragment;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,8 +12,11 @@ import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
+import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Category;
+import com.example.david_k.oneStopClick.ModelLayers.Enums.ChildActivityPages;
 import com.example.david_k.oneStopClick.R;
+import com.example.david_k.oneStopClick.View.Activity.ChildActivity;
 import com.example.david_k.oneStopClick.View.Adapter.CategoryCardAdapter;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -93,10 +97,12 @@ public class CategoryFragment extends Fragment {
 
     private void rowTapped(Category categoryItem) {
 
-        Toast.makeText(getActivity(), "Go to Category " + categoryItem.getCategoryName(), Toast.LENGTH_SHORT).show();
-//        Intent intent = new Intent(getActivity(), ProductDetailActivity.class);
-//        intent.putExtra(Constants.productKey, product);
-//
-//        startActivity(intent);
+//        Toast.makeText(getActivity(), "Go to Category " + categoryItem.getCategoryName(), Toast.LENGTH_SHORT).show();
+
+        Intent intent = new Intent(getActivity(), ChildActivity.class);
+        intent.putExtra(Constants.categoryKey, categoryItem);
+        intent.putExtra(Constants.childPageActivityKey, Constants.ChildActivityPagesEnum.CATEGORIZED_PRODUCT);
+
+        startActivity(intent);
     }
 }

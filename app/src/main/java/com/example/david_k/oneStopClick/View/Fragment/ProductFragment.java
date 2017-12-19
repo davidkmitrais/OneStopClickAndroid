@@ -12,10 +12,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.david_k.oneStopClick.Firebase.FirebaseProvider;
+import com.example.david_k.oneStopClick.View.Activity.GrandChildActivity;
 import com.example.david_k.oneStopClick.Helper.Constants;
 import com.example.david_k.oneStopClick.Helper.FirebaseProviderHelper;
+import com.example.david_k.oneStopClick.ModelLayers.Database.Category;
 import com.example.david_k.oneStopClick.ModelLayers.Database.Product;
 import com.example.david_k.oneStopClick.R;
 import com.example.david_k.oneStopClick.View.Activity.ChildActivity;
@@ -39,6 +42,8 @@ public class ProductFragment extends Fragment {
     private List<Product> productList;
     private GridLayoutManager layoutManager;
     private FirebaseProviderHelper firebaseProviderHelper = new FirebaseProviderHelper();
+    private Category categoryBundle = null;
+    private int childActivityPagesEnum = -1;
 
     public ProductFragment() {
         // Required empty public constructor
@@ -50,12 +55,38 @@ public class ProductFragment extends Fragment {
         // Inflate the layout for this fragment
         View view = inflater.inflate(R.layout.fragment_product, container, false);
 
+        if (getArguments() != null) {
+            categoryBundle = getArguments().getParcelable(Constants.categoryKey);
+            childActivityPagesEnum = getArguments().getInt(Constants.childPageActivityKey);
+        }
+        else {
+            childActivityPagesEnum = -1;
+        }
+
+        setupTitle(view);
+
         setupRecyclerView(view);
 
         setupSearch(view);
 
         return view;
     }
+
+    private void setupTitle(View view){
+        String title;
+
+        if (childActivityPagesEnum == -1){
+            title = "All Product";
+        }
+        else {
+            title = "Categorized Product";
+        }
+
+
+        TextView titleText = view.findViewById(R.id.prodcut_list_title);
+        titleText.setText(title);
+    }
+
 
     private void setupRecyclerView(View view) {
         recyclerView = view.findViewById(R.id.product_list_rv);
@@ -106,9 +137,26 @@ public class ProductFragment extends Fragment {
         firebaseProviderHelper.setViewCountForProduct(incViewCount, product.getFirebaseKey());
 
 //        Toast.makeText(getActivity(), "Go to Product " + product.getName(), Toast.LENGTH_SHORT).show();
-        Intent intent = new Intent(getActivity(), ChildActivity.class);
+
+        Class activityClass;
+
+        if (childActivityPagesEnum == -1) {
+            activityClass = ChildActivity.class;
+        }
+        else {
+            activityClass = GrandChildActivity.class;
+        }
+
+        Intent intent = new Intent(getActivity(), activityClass);
         intent.putExtra(Constants.productKey, product);
-        intent.putExtra(Constants.childPageActivityKey, "ProductDetail");
+
+
+        if (childActivityPagesEnum == -1) {
+            intent.putExtra(Constants.childPageActivityKey, Constants.ChildActivityPagesEnum.PRODUCT_DETAIL);
+        }
+        else {
+            intent.putExtra(Constants.grandChildPageActivityKey, Constants.GrandChildActivityPagesEnum.PRODUCT_DETAIL);
+        }
 
         startActivity(intent);
     }
